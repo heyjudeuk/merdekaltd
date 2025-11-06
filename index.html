@@ -1,231 +1,273 @@
 <!doctype html>
 <html lang="en-GB">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-t">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Merdeka Ltd — Operating company for echo3.co & bespokecurtains.uk</title>
+  <title>Merdeka Ltd — Operating company for echo3.co &amp; bespokecurtains.uk</title>
   <meta name="description" content="Merdeka Ltd is the operating company for echo3.co and bespokecurtains.uk.">
-  <meta name="robots" content="index,follow">
-  <meta property="og:title" content="Merdeka Ltd">
-  <meta property="og:description" content="Operating company for echo3.co and bespokecurtains.uk.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://merdekaltd.co.uk/">
-  <meta name="theme-color" content="#0f172a">
-  <!-- Optional: add your favicon files
-  <link rel="icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"> -->
-
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#191d1e">
   <style>
-    :root {
-      --bg: #05060c;
-      --text: #e6e8ee;
-      --muted: #9aa3b2;
-      --card: rgba(17, 19, 27, .72);
-      --ring: rgba(99, 102, 241, .35);
-      --brand-1: #60a5fa; /* blue-400 */
-      --brand-2: #34d399; /* emerald-400 */
-      --brand-3: #a78bfa; /* violet-400 */
-      --brand-4: #f472b6; /* pink-400 */
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f7f8fb;
-        --text: #0f172a;
-        --muted: #475569;
-        --card: #ffffff;
-        --ring: rgba(37, 99, 235, .25);
-      }
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text);
-      background: var(--bg);
-      overflow-x: hidden;
-    }
+/* Exact gradient background as requested */
+html, body{
+  width:100%; height:100%; padding:0; margin:0; overflow: hidden;
+  background: #191d1e; /* Old browsers */
+  background: -moz-linear-gradient(0deg,  #191d1e 50%, #283139 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(50%,#191d1e), color-stop(100%,#283139)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* IE10+ */
+  background: linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#191d1e', endColorstr='#283139',GradientType=1 ); /* IE6-9 */
+  background-attachment: fixed
+}
 
-    /* Animated background */
-    .bg {
-      position: fixed; inset: -20vmax; z-index: -1; filter: blur(60px) saturate(120%);
-      background: radial-gradient(60vmax 60vmax at 10% 15%, rgba(79,70,229,.14), transparent 55%),
-                  radial-gradient(80vmax 80vmax at 90% 10%, rgba(56,189,248,.13), transparent 60%),
-                  conic-gradient(from 0deg at 50% 50%, rgba(99,102,241,.14), rgba(20,184,166,.1), rgba(232,121,249,.12), rgba(99,102,241,.14));
-      animation: bgShift 26s linear infinite;
-    }
-    @keyframes bgShift { to { transform: rotate(1turn) scale(1.02); } }
+#projector {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  display:block; z-index:1;
+}
 
-    .container { max-width: 1000px; margin: 0 auto; padding: 48px 20px 96px; }
+/* Responsive centred stack */
+.center-wrap{
+  position:absolute; left:50%; top:50%;
+  transform: translate(-50%, -50%);
+  z-index:2; text-align:center;
+  padding: 0 4vw;
+  max-width: 90vw;
+}
 
-    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .logo { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
-    .logo-mark {
-      width: 40px; height: 40px; border-radius: 12px; position: relative; overflow: hidden;
-      background: linear-gradient(135deg, var(--brand-1), var(--brand-2), var(--brand-3));
-      background-size: 200% 200%; animation: hue 8s ease-in-out infinite alternate;
-      box-shadow: 0 10px 25px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.25);
-    }
-    @keyframes hue { to { background-position: 100% 100%; filter: hue-rotate(20deg); } }
-    .logo-text { font-weight: 800; letter-spacing: .3px; font-size: 18px; }
+/* SVG responsiveness: constrain width with clamp; height auto via viewBox */
+.logo{
+  margin: 0 auto;
+  width: clamp(220px, 42vw, 520px);
+}
+.logo svg{ width:100%; height:auto; display:block; fill:#ffffff; }
 
-    /* Hero */
-    .card {
-      position: relative; margin-top: 40px; padding: 32px; border-radius: 18px;
-      background: var(--card); border: 1px solid rgba(255,255,255,.06);
-      box-shadow: 0 18px 50px rgba(0,0,0,.35);
-      transform: translateZ(0);
-    }
-    @media (prefers-color-scheme: light) {
-      .card { border-color: rgba(0,0,0,.06); box-shadow: 0 12px 30px rgba(0,0,0,.08); }
-    }
+.strapline{
+  margin-top:14px; color:#9aa3b2;
+  font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica Neue,Arial;
+  font-size: clamp(15px,2vw,18px);
+}
 
-    .blob {
-      position: absolute; inset: auto -80px -80px auto; width: 320px; height: 320px; border-radius: 40% 60% 50% 50% / 55% 45% 55% 45%;
-      background: radial-gradient(circle at 30% 30%, rgba(99,102,241,.45), transparent 60%),
-                  radial-gradient(circle at 70% 70%, rgba(52,211,153,.45), transparent 60%);
-      filter: blur(30px) saturate(130%);
-      animation: floaty 18s ease-in-out infinite;
-      pointer-events: none; opacity: .35;
-    }
-    @keyframes floaty {
-      0% { transform: translate(0,0) rotate(0deg); }
-      50% { transform: translate(-10%, -6%) rotate(12deg); }
-      100% { transform: translate(0,0) rotate(0deg); }
-    }
-
-    h1 {
-      font-size: clamp(30px, 6vw, 56px); line-height: 1.08; margin: 6px 0 10px;
-      background: linear-gradient(90deg, var(--brand-1), var(--brand-2), var(--brand-3), var(--brand-4));
-      background-size: 200% 200%; -webkit-background-clip: text; background-clip: text; color: transparent;
-      animation: shine 10s ease-in-out infinite;
-      letter-spacing: .2px;
-    }
-    @keyframes shine { 50% { background-position: 100% 50%; } }
-
-    p.lede { font-size: clamp(16px, 2vw, 20px); color: var(--muted); margin: 0 0 18px; }
-
-    .links { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 10px; }
-    .btn {
-      --bg: rgba(99,102,241,.16);
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      text-decoration: none; user-select: none; cursor: pointer; border-radius: 12px;
-      padding: 12px 16px; font-weight: 700; font-size: 15px; letter-spacing: .2px;
-      border: 1px solid rgba(255,255,255,.12); background: var(--bg); backdrop-filter: blur(6px);
-      transition: transform .08s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
-      box-shadow: 0 6px 24px var(--ring);
-    }
-    .btn.primary { --bg: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color: white; border-color: transparent; }
-    .btn.secondary { color: var(--text); }
-    .btn:active { transform: translateY(1px); }
-    .btn:hover { transform: translateY(-1px); }
-
-    .details { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
-    .detail { padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
-    @media (prefers-color-scheme: light) { .detail { background: rgba(0,0,0,.03); border-color: rgba(0,0,0,.06); } }
-    .detail dt { font-weight: 800; font-size: 13px; letter-spacing: .2px; }
-    .detail dd { margin: 6px 0 0; color: var(--muted); }
-
-    footer { margin-top: 34px; color: var(--muted); font-size: 14px; }
-    .registered-address { font-size: 9px; opacity: .6; margin-top: 8px; }
-
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-    .nowrap { white-space: nowrap; }
-
-    /* Enter animations */
-    .reveal { opacity: 0; transform: translateY(8px); animation: fadeUp .7s ease forwards; }
-    .reveal.d1 { animation-delay: .06s; }
-    .reveal.d2 { animation-delay: .12s; }
-    .reveal.d3 { animation-delay: .18s; }
-    .reveal.d4 { animation-delay: .24s; }
-    @keyframes fadeUp { to { opacity: 1; transform: none; } }
-
-    /* Respect reduced motion */
-    @media (prefers-reduced-motion: reduce) {
-      .bg, .logo-mark, .blob, h1 { animation: none !important; }
-      .reveal { opacity: 1; transform: none; }
-    }
+.infobar{
+  position:fixed; left:0; right:0; bottom:0; padding:10px 14px; z-index:2;
+  color:#9aa3b2; text-align:center; line-height:1.5;
+  font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica Neue,Arial;
+  font-size: clamp(11px,1.6vw,14px);
+  background: linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.15), transparent);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+}
+.infobar a{color:inherit; text-underline-offset:2px;}
+.nowrap{white-space:nowrap;}
   </style>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Merdeka Ltd",
-    "url": "https://merdekaltd.co.uk/",
-    "sameAs": [
-      "https://echo3.co/",
-      "https://bespokecurtains.uk/"
-    ],
-    "foundingLocation": "United Kingdom",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "REPLACE_WITH_REGISTERED_OFFICE_LINE_1",
-      "addressLocality": "REPLACE_WITH_TOWN",
-      "postalCode": "REPLACE_WITH_POSTCODE",
-      "addressCountry": "GB"
-    }
-  }
-  </script>
 </head>
 <body>
-  <div class="bg" aria-hidden="true"></div>
-  <div class="container">
-    <header class="reveal">
-   
-    </header>
+  <canvas id="projector"></canvas>
 
-    <main class="card reveal d1" role="main">
-      <div class="blob" aria-hidden="true"></div>
-      <h1 class="reveal">Merdeka!</h1>
-      <p class="lede reveal d2">Merdeka Ltd is the operating company for <a href="https://echo3.co/" target="_blank" rel="noopener">echo3.co</a> and <a href="https://bespokecurtains.uk/" target="_blank" rel="noopener">bespokecurtains.uk</a>.</p>
+  <div class="center-wrap" aria-label="Merdeka Ltd">
+    <div class="logo" id="logo" aria-label="Merdeka Ltd logo">
+      <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 370 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(0.709654,0,0,0.709654,-8.48636,-86.2154)">
+        <path d="M281.616,309.029L262.248,309.091C262.248,309.091 261.207,292.987 257.633,276.674C255.493,266.911 252.653,256.946 248.092,251.246C238.357,239.077 181.947,189.521 153.497,164.769L153.698,206.677L153.637,207.233C153.637,207.233 152.947,219.304 165.8,230.805C183.021,246.213 204.252,264.574 213.322,273.94C216.749,277.478 219.328,281.746 220.225,287.003C221.112,292.207 218.703,305.482 218.703,305.482L211.425,298.837C211.425,298.837 169.835,260.864 152.657,245.494C133.232,228.113 133.701,209.248 133.982,205.702L133.579,121.489L149.976,135.637C149.976,135.637 250.049,222.139 263.484,238.933C268.147,244.762 271.924,253.684 274.654,263.44C280.355,283.812 281.616,309.029 281.616,309.029Z"/>
+        <g transform="matrix(-1,0,0,1,544.947,0)">
+            <path d="M281.616,309.029L262.248,309.091C262.248,309.091 261.207,292.987 257.633,276.674C255.493,266.911 252.653,256.946 248.092,251.246C238.357,239.077 181.947,189.521 153.497,164.769L153.698,206.677L153.637,207.233C153.637,207.233 152.947,219.304 165.8,230.805C183.021,246.213 204.252,264.574 213.322,273.94C216.749,277.478 219.328,281.746 220.225,287.003C221.112,292.207 218.703,305.482 218.703,305.482L211.425,298.837C211.425,298.837 169.835,260.864 152.657,245.494C133.232,228.113 133.701,209.248 133.982,205.702L133.579,121.489L149.976,135.637C149.976,135.637 250.049,222.139 263.484,238.933C268.147,244.762 271.924,253.684 274.654,263.44C280.355,283.812 281.616,309.029 281.616,309.029Z"/>
+        </g>
+    </g>
+    <g transform="matrix(5.85839,0,0,5.85839,-621.675,-2112.09)">
+        <g transform="matrix(12,0,0,12,105.121,394.625)">
+            <path d="M0.083,-0L0.083,-0.7L0.217,-0.7L0.515,-0.206L0.444,-0.206L0.737,-0.7L0.87,-0.7L0.872,-0L0.72,-0L0.719,-0.467L0.747,-0.467L0.513,-0.074L0.44,-0.074L0.201,-0.467L0.235,-0.467L0.235,-0L0.083,-0Z" style="fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(12,0,0,12,116.581,394.625)">
+            <path d="M0.083,-0L0.083,-0.7L0.612,-0.7L0.612,-0.57L0.244,-0.57L0.244,-0.13L0.625,-0.13L0.625,-0L0.083,-0ZM0.232,-0.292L0.232,-0.418L0.569,-0.418L0.569,-0.292L0.232,-0.292Z" style="fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(12,0,0,12,124.633,394.625)">
+            <path d="M0.083,-0L0.083,-0.7L0.382,-0.7C0.479,-0.7 0.555,-0.677 0.609,-0.632C0.663,-0.587 0.69,-0.525 0.69,-0.446C0.69,-0.394 0.678,-0.349 0.653,-0.312C0.629,-0.274 0.594,-0.245 0.548,-0.225C0.503,-0.205 0.448,-0.195 0.386,-0.195L0.173,-0.195L0.245,-0.266L0.245,-0L0.083,-0ZM0.529,-0L0.353,-0.254L0.526,-0.254L0.703,-0L0.529,-0ZM0.245,-0.248L0.173,-0.324L0.377,-0.324C0.427,-0.324 0.464,-0.335 0.489,-0.357C0.514,-0.378 0.526,-0.408 0.526,-0.446C0.526,-0.485 0.514,-0.515 0.489,-0.536C0.464,-0.557 0.427,-0.568 0.377,-0.568L0.173,-0.568L0.245,-0.645L0.245,-0.248Z" style="fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(12,0,0,12,133.453,394.625)">
+            <path d="M0.083,-0L0.083,-0.7L0.401,-0.7C0.477,-0.7 0.544,-0.686 0.602,-0.657C0.66,-0.628 0.705,-0.587 0.738,-0.535C0.77,-0.483 0.787,-0.421 0.787,-0.35C0.787,-0.279 0.77,-0.218 0.738,-0.165C0.705,-0.113 0.66,-0.072 0.602,-0.043C0.544,-0.014 0.477,-0 0.401,-0L0.083,-0ZM0.245,-0.133L0.393,-0.133C0.44,-0.133 0.48,-0.142 0.515,-0.159C0.549,-0.177 0.575,-0.202 0.594,-0.235C0.613,-0.267 0.623,-0.306 0.623,-0.35C0.623,-0.395 0.613,-0.433 0.594,-0.466C0.575,-0.498 0.549,-0.523 0.515,-0.541C0.48,-0.558 0.44,-0.567 0.393,-0.567L0.245,-0.567L0.245,-0.133Z" style="fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(12,0,0,12,143.365,394.625)">
+            <path d="M0.083,-0L0.083,-0.7L0.612,-0.7L0.612,-0.57L0.244,-0.57L0.244,-0.13L0.625,-0.13L0.625,-0L0.083,-0ZM0.232,-0.292L0.232,-0.418L0.569,-0.418L0.569,-0.292L0.232,-0.292Z" style="fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(12,0,0,12,151.417,394.625)">
+            <path d="M0.228,-0.16L0.219,-0.347L0.554,-0.7L0.734,-0.7L0.432,-0.375L0.342,-0.279L0.228,-0.16ZM0.083,-0L0.083,-0.7L0.244,-0.7L0.244,-0L0.083,-0ZM0.562,-0L0.313,-0.305L0.419,-0.42L0.751,-0L0.562,-0Z" style="fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(12,0,0,12,159.925,394.625)">
+            <path d="M-0.009,-0L0.303,-0.7L0.463,-0.7L0.776,-0L0.606,-0L0.35,-0.618L0.414,-0.618L0.157,-0L-0.009,-0ZM0.147,-0.15L0.19,-0.273L0.55,-0.273L0.594,-0.15L0.147,-0.15Z" style="fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(12,0,0,12,169.117,394.625)">
+        </g>
+    </g>
+</svg>
 
-      <div class="links reveal d3" role="navigation" aria-label="Related sites">
-        <a class="btn primary" href="https://echo3.co/" target="_blank" rel="noopener">Visit echo3.co</a>
-        <a class="btn secondary" href="https://bespokecurtains.uk/" target="_blank" rel="noopener">Visit bespokecurtains.uk</a>
-      </div>
-
-      <section aria-labelledby="company-details" class="details reveal d4">
-        <h2 id="company-details" class="sr-only">Company details</h2>
-
-        <dl class="detail">
-          <dt>Legal name</dt>
-          <dd>Merdeka Ltd</dd>
-        </dl>
-
-        <dl class="detail">
-          <dt>Company number</dt>
-          <dd>07488028 (Registered in England &amp; Wales)</dd>
-        </dl>
-
-        <dl class="detail">
-          <dt>Trading/Operating statement</dt>
-          <dd>Merdeka Ltd operates and administers the activities of <span class="nowrap"><a href="https://echo3.co/" target="_blank" rel="noopener">echo3.co</a></span> and <span class="nowrap"><a href="https://bespokecurtains.uk/" target="_blank" rel="noopener">bespokecurtains.uk</a></span>.</dd>
-        </dl>
-
-        <dl class="detail">
-          <dt>Contact</dt>
-          <dd>Email: <a href="mailto:info@merdekaltd.co.uk">info@merdekaltd.co.uk</a> • Phone:+44(0)7413 678040 </dd>
-        </dl>
-
-        <dl class="detail">
-          <dt>Registered office</dt>
-          <dd class="registered-address">10 Southwood Road, Farnborough, England, GU14 0JQ — This address is for statutory purposes only and is not a correspondence location.</dd>
-        </dl>
-      </section>
-
-      <footer>
-        <div>© <span id="year"></span> Merdeka Ltd. All rights reserved.</div>
-        <div class="registered-address">Company information provided for compliance with the Companies Act 2006.</div>
-      </footer>
-    </main>
+    </div>
+    <p class="strapline">
+      Merdeka Ltd is the operating company for
+      <a href="https://echo3.co/" target="_blank" rel="noopener">echo3.co</a> and
+      <a href="https://bespokecurtains.uk/" target="_blank" rel="noopener">bespokecurtains.uk</a>.
+    </p>
   </div>
 
+  <footer class="infobar">
+    <span>Legal Name: <strong>Merdeka Ltd</strong></span> /
+    <span>Company number: <strong>07488028</strong> (Registered in England &amp; Wales)</span> /
+    <span>Registered office: <span class="nowrap">10 Southwood Road, Farnborough, England, GU14 0JQ</span> — This address is for statutory purposes only</span> /
+    <span>Contact: <a href="mailto:info@merdekaltd.co.uk">info@merdekaltd.co.uk</a> • <span class="nowrap">+44 (0)7413 678040</span></span> /
+    <span>© 2025 Merdeka Ltd</span>
+  </footer>
+
   <script>
-    // Dynamic copyright year
-    document.getElementById('year').textContent = new Date().getFullYear();
+/* Offline Canvas engine with tweaks:
+   - Lights reduced/offset to avoid giant centre blobs
+   - Particles sizes reduced for medium/large
+   - Reset composite mode before particles
+*/
+(function(){'use strict';
+  var canvas = document.getElementById('projector');
+  var ctx = canvas.getContext('2d');
+  var DPR = Math.max(1, window.devicePixelRatio || 1);
+  var W, H;
+
+  function resize() {
+    var bw = document.documentElement.clientWidth;
+    var bh = document.documentElement.clientHeight;
+    W = canvas.width = Math.floor(bw * DPR);
+    H = canvas.height = Math.floor(bh * DPR);
+    canvas.style.width = bw + 'px';
+    canvas.style.height = bh + 'px';
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Lights: smaller, lower alpha, and offset away from exact centre
+  // [FIXED: Removed the 3 spotlights as requested]
+  var lights = [];
+
+  function ellipsePath(x, y, rw, rh) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(rw, rh);
+    ctx.beginPath();
+    ctx.arc(0, 0, 1, 0, Math.PI*2);
+    ctx.restore();
+  }
+
+  // particles
+  function range(min, max) { return min + (max - min) * Math.random(); }
+  function wrange(to, from, picks, band, strength) {
+    if (Math.random() <= (strength || 0)) { return range(band[0], band[1]); }
+    return range(to, from);
+  }
+  function clamp(v,a,b){return v<a?a:(v>b?b:v);}
+
+  var particleSets = [
+    { id:'small',  num:320, bw:3,  amax:0.35, areaH:.5, color:'#0cdbf3', fill:false },
+    { id:'medium', num:120, bw:6,  amax:0.28, areaH:1,  color:'#6fd2f3', fill:true  },
+    { id:'large',  num:12,  bw:16, amax:0.18, areaH:1,  color:'#93e9f3', fill:true  }
+  ];
+
+  var particles = [];
+  function initParticle(p, areaH) {
+    p.speed = range(1,3);
+    p.initY = wrange(0, H, 1, [ H*(2-areaH/2)/4, H*(2+areaH/2)/4 ], 0.8 );
+    p.initX = wrange(0, W, 1, [ W/4, W*3/4 ], 0.6 );
+    p.x = p.initX; p.y = p.initY;
+    p.scale = range(0.3, 1);
+    p.tx = range(p.initX - p.dist, p.initX + p.dist);
+    p.ty = range(p.initY - p.dist, p.initY + p.dist);
+    p.t = Math.random()*Math.PI*2;
+    p.alpha = range(0.05, p.amax);
+    p.da = (Math.random()<.5?-1:1) * range(0.002, 0.01);
+    p.v = range(0.2, 0.6);
+  }
+
+  function createParticles() {
+    particles.length = 0;
+    for (var i=0;i<particleSets.length;i++) {
+      var s = particleSets[i];
+      for (var j=0;j<s.num;j++) {
+        var p = {
+          bw:s.bw, amax:s.amax, areaH:s.areaH, color:s.color, fill:s.fill,
+          dist: s.bw*2
+        };
+        initParticle(p, s.areaH);
+        particles.push(p);
+      }
+    }
+  }
+  createParticles();
+
+  var last = performance.now();
+  function tick(now) {
+    var dt = clamp((now - last)/16.67, 0.2, 2);
+    last = now;
+    render(dt);
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  function render(dt) {
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0,0,W,H);
+
+    // Lights layer (additive glow)
+    ctx.globalCompositeOperation = 'lighter';
+    for (var i=0;i<lights.length;i++) {
+      var L = lights[i];
+      L.t += 0.0025 * (i+1) * dt;
+      var cx = W/2 + (L.ox*DPR) + Math.cos(L.t + i)*70*DPR;
+      var cy = H/2 + (L.oy*DPR) + Math.sin(L.t*1.2 + i)*44*DPR;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(Math.sin(L.t*0.5)*0.35);
+      ctx.globalAlpha = L.a;
+      ctx.shadowColor = L.color;
+      ctx.shadowBlur = Math.max(L.w, L.h) * 1.0;
+      ctx.fillStyle = L.color;
+      ellipsePath(0,0, L.w*DPR, L.h*DPR);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Reset to normal mode before drawing particles
+    ctx.globalCompositeOperation = 'source-over';
+
+    // Particles
+    for (var k=0;k<particles.length;k++) {
+      var p = particles[k];
+      var ease = 0.02 * dt;
+      p.x += (p.tx - p.x) * ease;
+      p.y += (p.ty - p.y) * ease;
+      if (Math.abs(p.x - p.tx) < 1*DPR && Math.abs(p.y - p.ty) < 1*DPR) {
+        p.tx = range(p.initX - p.dist, p.initX + p.dist);
+        p.ty = range(p.initY - p.dist, p.initY + p.dist);
+      }
+      p.alpha += p.da * dt;
+      if (p.alpha > p.amax || p.alpha < 0.05) { p.da *= -1; p.alpha = clamp(p.alpha, 0.05, p.amax); }
+
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      if (p.fill) {
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = (p.bw*DPR)/1.6;
+        ctx.beginPath();
+        ctx.arc(0, 0, (p.bw*DPR), 0, Math.PI*2);
+        ctx.fill();
+      } else {
+        ctx.strokeStyle = p.color;
+        ctx.lineWidth = DPR;
+        ctx.beginPath();
+        ctx.arc(0, 0, (p.bw*DPR), 0, Math.PI*2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+})();
   </script>
 </body>
 </html>
