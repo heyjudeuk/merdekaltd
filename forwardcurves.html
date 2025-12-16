@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Forward Curves: Ship Types (USD/day)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: #0f1a2e;
+      --panel2: #0c1628;
+      --text: #e6edf6;
+      --muted: #9db0c7;
+      --grid: rgba(157,176,199,0.16);
+      --border: rgba(157,176,199,0.14);
+      --shadow: rgba(0,0,0,0.22);
+
+      --accent: #7aa2ff;
+      --accentFill: rgba(122,162,255,0.18);
+
+      --pos: #4ade80;
+      --neg: #fb7185;
+      --neu: #a3b3c7;
+    }
+
+    body{
+      margin:0;
+      padding: 18px;
+      background: radial-gradient(1200px 600px at 15% 0%, #111f3a 0%, var(--bg) 60%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    header{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: 0.2px;
+      font-weight: 650;
+    }
+
+    .sub{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .status{
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .grid{
+      display:grid;
+      gap: 14px;
+    }
+
+    @media (min-width: 900px){
+      .grid{
+        grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      }
+    }
+
+    .card{
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 14px 12px 14px;
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
+      box-shadow: 0 10px 30px var(--shadow);
+    }
+
+    .titleRow{
+      display:flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .title{
+      margin:0;
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .meta{
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    canvas{
+      width: 100% !important;
+      height: 260px !important;
+    }
+
+    /* Stats: make each pill roomy, label and value on separate lines */
+    .metrics{
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+
+    @media (min-width: 520px){
+      .metrics{
+        grid-template-columns: repeat(3, minmax(0,1fr));
+      }
+    }
+
+    .pill{
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .pill .k{
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.25px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .pill .v{
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .v.pos{ color: var(--pos); }
+    .v.neg{ color: var(--neg); }
+    .v.neu{ color: var(--neu); }
+
+    .error{
+      border-color: rgba(255, 90, 122, 0.35);
+      background: rgba(255, 90, 122, 0.10);
+      color: #ffd2dc;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>Forward Curves: Ship Types (USD/day)</h1>
+      <div class="sub">
+        Small multiples; each chart is one ship type forward curve. Tenors are 3 months apart.
+      </div>
+    </div>
+    <div class="sub" id="lastUpdated"></div>
+  </header>
+
+  <div id="status" class="status">Loading…</div>
+  <div id="charts" class="grid"></div>
+
+  <script>
+    const CSV_URL =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdqAGPK_OWDdd7rIBkTtSk2WG4k7Rgth9rTbkN9KR6U74OXO8kq-QOmiAVIo1ZtA/pub?gid=1196769730&single=true&output=csv";
+
+    const statusEl = document.getElementById("status");
+    const chartsEl = document.getElementById("charts");
+    const lastUpdatedEl = document.getElementById("lastUpdated");
+
+    function setStatus(msg, isError=false) {
+      statusEl.textContent = msg;
+      statusEl.className = "status" + (isError ? " error" : "");
+    }
+
+    function getCss(varName){
+      return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    }
+
+    function toNumber(x) {
+      const s = String(x ?? "").trim().replace(/^"+|"+$/g,"").replace(/,/g,"");
+      if (!s) return null;
+      const n = Number(s);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function fmtUSD(n) {
+      if (n === null || n === undefined) return "—";
+      return new Intl.NumberFormat("en-GB", { maximumFractionDigits: 0 }).format(n);
+    }
+
+    function fmtSignedUSD(n) {
+      if (n === null || n === undefined) return "—";
+      const sign = n > 0 ? "+" : (n < 0 ? "−" : "");
+      return sign + fmtUSD(Math.abs(n));
+    }
+
+    function cls(n){
+      if (n === null || n === undefined) return "neu";
+      if (n > 0) return "pos";
+      if (n < 0) return "neg";
+      return "neu";
+    }
+
+    function finite(arr){ return arr.filter(v => typeof v === "number" && Number.isFinite(v)); }
+
+    function firstFinite(arr){
+      for (const v of arr) if (typeof v === "number" && Number.isFinite(v)) return v;
+      return null;
+    }
+
+    function lastFinite(arr){
+      for (let i = arr.length - 1; i >= 0; i--){
+        const v = arr[i];
+        if (typeof v === "number" && Number.isFinite(v)) return v;
+      }
+      return null;
+    }
+
+    function lastStepDelta(arr){
+      let last = null;
+      for (let i = arr.length - 1; i >= 0; i--){
+        const v = arr[i];
+        if (typeof v === "number" && Number.isFinite(v)){
+          if (last === null) last = v;
+          else return last - v;
+        }
+      }
+      return null;
+    }
+
+    function minMax(arr){
+      const xs = finite(arr);
+      if (!xs.length) return { min: null, max: null };
+      let min = xs[0], max = xs[0];
+      for (const v of xs){ if (v < min) min = v; if (v > max) max = v; }
+      return { min, max };
+    }
+
+    function avgSlopePerStep(arr){
+      const xs = finite(arr);
+      if (xs.length < 2) return null;
+      return (xs[xs.length - 1] - xs[0]) / (xs.length - 1);
+    }
+
+    function pill(key, value, colorClass="neu"){
+      const p = document.createElement("div");
+      p.className = "pill";
+
+      const k = document.createElement("div");
+      k.className = "k";
+      k.textContent = key;
+
+      const v = document.createElement("div");
+      v.className = "v " + colorClass;
+      v.textContent = value;
+
+      p.appendChild(k);
+      p.appendChild(v);
+      return p;
+    }
+
+    async function init() {
+      try {
+        const res = await fetch(CSV_URL, { cache: "no-store" });
+        if (!res.ok) throw new Error(`Fetch failed: ${res.status} ${res.statusText}`);
+
+        const text = await res.text();
+        const parsed = Papa.parse(text, { skipEmptyLines: true });
+
+        const rows = parsed.data;
+        if (!rows || rows.length < 2) throw new Error("CSV has no data rows.");
+
+        const headers = rows[0];
+        const titles = headers.slice(1).map(t => String(t ?? "").trim()).filter(Boolean);
+
+        const dataRows = rows.slice(1);
+        const tenors = dataRows.map(r => String(r[0] ?? "").trim()).filter(Boolean);
+
+        setStatus(`Loaded ${dataRows.length} forward points across ${titles.length} ship types.`);
+        lastUpdatedEl.textContent = "Last updated: " + new Date().toLocaleString("en-GB");
+
+        Chart.defaults.color = getCss("--muted");
+
+        titles.forEach((title, i) => {
+          const values = dataRows.map(r => toNumber(r[i + 1]));
+
+          const front = firstFinite(values);
+          const back = lastFinite(values);
+          const spread = (front !== null && back !== null) ? (back - front) : null;
+
+          const tail = lastStepDelta(values);
+          const avg = avgSlopePerStep(values);
+
+          const mm = minMax(values);
+          const rangeText = (mm.min !== null && mm.max !== null)
+            ? `$${fmtUSD(mm.min)} to $${fmtUSD(mm.max)}`
+            : "—";
+
+          const card = document.createElement("div");
+          card.className = "card";
+
+          const titleRow = document.createElement("div");
+          titleRow.className = "titleRow";
+
+          const h = document.createElement("div");
+          h.className = "title";
+          h.textContent = title.trim();
+          titleRow.appendChild(h);
+
+          const meta = document.createElement("div");
+          meta.className = "meta";
+          meta.textContent = (spread === null) ? "" : (spread > 0 ? "Contango" : (spread < 0 ? "Backwardation" : "Flat"));
+          titleRow.appendChild(meta);
+
+          card.appendChild(titleRow);
+
+          const canvas = document.createElement("canvas");
+          card.appendChild(canvas);
+
+          const metrics = document.createElement("div");
+          metrics.className = "metrics";
+
+          metrics.appendChild(pill("Front (near)", front !== null ? `$${fmtUSD(front)}` : "—", "neu"));
+          metrics.appendChild(pill("Back (far)",  back  !== null ? `$${fmtUSD(back)}`  : "—", "neu"));
+          metrics.appendChild(pill("Back–Front",  spread !== null ? `$${fmtSignedUSD(spread)}` : "—", cls(spread)));
+          metrics.appendChild(pill("Avg slope / qtr", avg !== null ? `$${fmtSignedUSD(avg)}` : "—", cls(avg)));
+          metrics.appendChild(pill("Tail slope / qtr", tail !== null ? `$${fmtSignedUSD(tail)}` : "—", cls(tail)));
+          metrics.appendChild(pill("Range", rangeText, "neu"));
+
+          card.appendChild(metrics);
+          chartsEl.appendChild(card);
+
+          new Chart(canvas, {
+            type: "line",
+            data: {
+              labels: tenors,
+              datasets: [{
+                data: values,
+                borderColor: getCss("--accent"),
+                backgroundColor: getCss("--accentFill"),
+                borderWidth: 2,
+                tension: 0.25,
+                fill: true,
+
+                // Make it easier to hit tooltips
+                pointRadius: 3,
+                pointHoverRadius: 7,
+                pointHitRadius: 6
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+
+              // This is the key to “hit and miss” tooltips
+            interaction: {
+  mode: "index",
+  axis: "x",
+  intersect: false
+},
+
+
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+					enabled: true,
+					padding: 14,
+					titleFont: { size: 14, weight: "600" },
+					bodyFont: { size: 14 },
+					displayColors: false,
+					callbacks: {
+						title: (items) => items?.[0]?.label ?? "",
+						label: (ctx) => ` $${fmtUSD(ctx.parsed.y)} / day`
+					}
+				}
+              },
+              scales: {
+                x: {
+                  grid: { color: getCss("--grid") },
+                  ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }
+                },
+                y: {
+                  grid: { color: getCss("--grid") },
+                  ticks: { callback: (val) => "$" + fmtUSD(val) },
+                  title: { display: true, text: "USD/day" }
+                }
+              }
+            }
+          });
+        });
+
+      } catch (err) {
+        console.error(err);
+        setStatus("Error: " + (err && err.message ? err.message : String(err)), true);
+      }
+    }
+
+    init();
+  </script>
+
+</body>
+</html>
