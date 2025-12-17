@@ -469,9 +469,9 @@ const TANKER_TREND_5Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm
       const sizes = tableRows.map(r => r.Size);
 
       const periods = [
-        { label: "4-6 MONTHS", val: "6Months",  chg: "6Mchange" },
-        { label: "1 YEAR",     val: "1Year",    chg: "1YRchange" },
-        { label: "2 YEAR",     val: "2Year",    chg: "2YRchange" },
+        { label: "4-6 M", val: "6Months",  chg: "6Mchange" },
+        { label: "1 Y",     val: "1Year",    chg: "1YRchange" },
+        { label: "2 Y",     val: "2Year",    chg: "2YRchange" },
       ];
 
       function makeOceanTableCard(title, ocean, mode) {
@@ -510,7 +510,7 @@ const TANKER_TREND_5Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm
           th.colSpan = 2;
           th.style.textAlign = "left";
           th.style.paddingLeft = "8px";
-          th.textContent = (mode === "rate") ? "RATE" : "% CHANGE";
+          th.textContent = (mode === "rate") ? "Rate" : "% Change";
           if (idx < periods.length - 1) th.classList.add("periodSeparator");
           r2.appendChild(th);
         });
@@ -609,7 +609,7 @@ function renderTankerTables(tableRows) {
       return isChangeKey(k) && (s.includes(base + "year") || s.includes(base + "yr") || s.includes("year" + base) || s.includes("yr" + base));
     }) || null;
 
-    return { yr, label: yr + " YEAR" + ((yr === 3 || yr === 5) ? "*" : ""), valKey: o.k, chgKey: chg };
+    return { yr, label: yr + " Y" + ((yr === 3 || yr === 5) ? "*" : ""), valKey: o.k, chgKey: chg };
   });
 
   function makeTableCard(title, makeBodyFn) {
@@ -648,7 +648,7 @@ function renderTankerTables(tableRows) {
       th.colSpan = 2;
       th.style.textAlign = "left";
       th.style.paddingLeft = "8px";
-      th.textContent = "RATE";
+      th.textContent = "Rate";
       if (idx < periods.length - 1) th.classList.add("periodSeparator");
       r2.appendChild(th);
     });
