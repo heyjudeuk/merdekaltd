@@ -36,6 +36,15 @@
     }
 
 
+
+    canvas{ display:block; max-width:100%; }
+
+    /* Default chart canvas sizing (prevents responsive height feedback loops on iOS) */
+    .card canvas{ width: 100% !important; height: 260px !important; }
+    /* Forward-curve charts manage their own height via .fcChartBox */
+    .fcChartBox canvas{ height: 100% !important; }
+
+
     body{
       margin:0;
       padding: 18px;
@@ -115,11 +124,6 @@
       color: var(--muted);
       font-size: 12px;
       white-space: nowrap;
-    }
-
-    canvas{
-      width: 100% !important;
-      height: 260px !important;
     }
 
     .metrics{
@@ -295,7 +299,22 @@
     .tableCard{ overflow: hidden; }
     .tableWrap{ width: 100%; max-width: 100%; }
 
-  </style>
+/* Forward-curve only wrapper to keep Chart.js sizing accurate */
+    .fcChartBox{
+      height: 260px;
+      width: 100%;
+      position: relative;
+    }
+
+    .fcChartBox canvas{
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+
+
+</style>
 </head>
 <body>
 
@@ -1027,8 +1046,19 @@ async function renderTankerTrendCharts() {
           titleRow.appendChild(meta);
           card.appendChild(titleRow);
 
+          // const canvas = document.createElement("canvas");
+          // card.appendChild(canvas);
+
+          // start
+
           const canvas = document.createElement("canvas");
-          card.appendChild(canvas);
+          const box = document.createElement("div");
+          box.className = "fcChartBox";
+          box.appendChild(canvas);
+
+          card.appendChild(box);
+
+          //end
 
           const metrics = document.createElement("div");
           metrics.className = "metrics";
@@ -1041,7 +1071,7 @@ async function renderTankerTrendCharts() {
           card.appendChild(metrics);
           chartsEl.appendChild(card);
 
-          new Chart(canvas, {
+          const fcChart = new Chart(canvas, {
             type: "line",
             data: {
               labels: tenors,
@@ -1092,6 +1122,13 @@ async function renderTankerTrendCharts() {
               }
             }
           });
+
+          // iOS/WebKit: ensure Chart.js recalculates after final layout
+          requestAnimationFrame(() => {
+            fcChart.resize();
+            requestAnimationFrame(() => fcChart.resize());
+          });
+
         });
 
         // Finish status last, once all charts are created
