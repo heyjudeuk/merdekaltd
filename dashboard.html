@@ -183,9 +183,19 @@
 }
 
     .tableWrap {
-      overflow-x: hidden;
+      overflow-x: auto; /* allow horizontal scroll on very narrow screens */
+      -webkit-overflow-scrolling: touch;
       border-radius: 12px;
       border: 1px solid var(--border);
+      margin-bottom: 10px; /* space before footnotes */
+    }
+
+    .tableFootnote{
+      margin: 0;
+      padding-top: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.3;
     }
 
     .tceTable {
@@ -291,7 +301,7 @@
   <div id="tankerTrends" class="tablesGrid" style="margin-bottom:14px;"></div>
 
   <section style="margin: 10px 0 14px;">
-    <h2 style="margin: 0 0 6px; font-size: 16px; letter-spacing: 0.2px;">Forward Curves: Ship Types (USD/day)</h2>
+    <h2 style="margin: 0 0 6px; font-size: 16px; letter-spacing: 0.2px;">FORWARD CURVES: SHIP TYPES (USD/DAY)</h2>
     <div class="sub">Small multiples; each chart is one ship type forward curve. Tenors are 3 months apart.</div>
   </section>
 
@@ -448,21 +458,27 @@ const TANKER_TREND_5Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm
     }
 
     // --- RENDER TABLES ---
-    function renderTwoTables(tableRows) {  const host = document.getElementById("tceTables");
+    
+    // --- RENDER DRY BULK TABLES (SPLIT ATL/PAC) ---
+    function renderTwoTables(tableRows) {
+      const host = document.getElementById("tceTables");
       if (!host) return;
       host.innerHTML = "";
 
       tableRows.sort((a, b) => (a.SORT ?? 999) - (b.SORT ?? 999));
       const sizes = tableRows.map(r => r.Size);
+
       const periods = [
-        { label: "4-6 MONTHS", atlVal: "6MonthsATL", atlChg: "6MchangeATL", pacVal: "6MonthsPAC", pacChg: "6MchangePAC" },
-        { label: "1 YEAR",     atlVal: "1YearATL",  atlChg: "1YRchangeATL", pacVal: "1YearPAC",  pacChg: "1YRchangePAC" },
-        { label: "2 YEAR",     atlVal: "2YearATL",  atlChg: "2YRchangeATL", pacVal: "2YearPAC",  pacChg: "2YRchangePAC" },
+        { label: "4-6 MONTHS", val: "6Months",  chg: "6Mchange" },
+        { label: "1 YEAR",     val: "1Year",    chg: "1YRchange" },
+        { label: "2 YEAR",     val: "2Year",    chg: "2YRchange" },
       ];
 
-      function makeTableCard(title, makeBodyFn) {
+      function makeOceanTableCard(title, ocean, mode) {
+        // mode: "rate" | "pct"
         const card = document.createElement("div");
         card.className = "tableCard";
+
         const h = document.createElement("h3");
         h.className = "tableTitle";
         h.textContent = title;
@@ -470,93 +486,85 @@ const TANKER_TREND_5Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm
 
         const wrap = document.createElement("div");
         wrap.className = "tableWrap";
+
         const table = document.createElement("table");
         table.className = "tceTable";
 
         const thead = document.createElement("thead");
+
         const r1 = document.createElement("tr");
-        r1.innerHTML = `
-          <th class="periodSeparator">PERIOD</th>
-          <th colspan="4" class="periodHeader periodSeparator">4-6 MONTHS</th>
-          <th colspan="4" class="periodHeader periodSeparator">1 YEAR</th>
-          <th colspan="4" class="periodHeader">2 YEAR</th>
-        `;
+        r1.appendChild(Object.assign(document.createElement("th"), { className: "periodSeparator", textContent: "PERIOD" }));
+        periods.forEach((p, idx) => {
+          const th = document.createElement("th");
+          th.colSpan = 2;
+          th.className = "periodHeader" + (idx < periods.length - 1 ? " periodSeparator" : "");
+          th.textContent = p.label;
+          r1.appendChild(th);
+        });
         thead.appendChild(r1);
 
         const r2 = document.createElement("tr");
-        r2.innerHTML = `
-          <th class="periodSeparator">SIZE</th>
-          <th colspan="2" style="text-align: left; padding-left: 8px;">ATLANTIC</th>
-          <th colspan="2" style="text-align: left; padding-left: 8px;" class="periodSeparator">PACIFIC</th>
-          <th colspan="2" style="text-align: left; padding-left: 8px;">ATLANTIC</th>
-          <th colspan="2" style="text-align: left; padding-left: 8px;" class="periodSeparator">PACIFIC</th>
-          <th colspan="2" style="text-align: left; padding-left: 8px;">ATLANTIC</th>
-          <th colspan="2" style="text-align: left; padding-left: 8px;">PACIFIC</th>
-        `;
+        r2.appendChild(Object.assign(document.createElement("th"), { className: "periodSeparator", textContent: "SIZE" }));
+        periods.forEach((p, idx) => {
+          const th = document.createElement("th");
+          th.colSpan = 2;
+          th.style.textAlign = "left";
+          th.style.paddingLeft = "8px";
+          th.textContent = (mode === "rate") ? "RATE" : "% CHANGE";
+          if (idx < periods.length - 1) th.classList.add("periodSeparator");
+          r2.appendChild(th);
+        });
         thead.appendChild(r2);
-        
+
         table.appendChild(thead);
 
         const tbody = document.createElement("tbody");
+
         sizes.forEach((size, idx) => {
+          const row = tableRows[idx];
           const tr = document.createElement("tr");
           tr.appendChild(Object.assign(document.createElement("td"), { textContent: size }));
-          const cells = makeBodyFn(tableRows[idx]);
-          cells.forEach(td => tr.appendChild(td));
+
+          periods.forEach((p, i) => {
+            const valKey = p.val + ocean; // e.g. 1YearATL
+            const chgKey = p.chg + ocean; // e.g. 1YRchangeATL
+            const chg = parsePctCell(row[chgKey]);
+
+            tr.appendChild(markerCell(chg));
+
+            const td = document.createElement("td");
+            if (mode === "rate") {
+              const v = parseMoneyCell(row[valKey]);
+              td.textContent = v === null ? "—" : `$${fmtGBPishNumber(v)}`;
+            } else {
+              td.textContent = (chg === null) ? "—" : `${chg}%`;
+            }
+
+            if (i < periods.length - 1) td.classList.add("periodSeparator");
+            tr.appendChild(td);
+          });
+
           tbody.appendChild(tr);
         });
+
         table.appendChild(tbody);
         wrap.appendChild(table);
         card.appendChild(wrap);
 
+
+
     return card;
       }
 
-      const table1 = makeTableCard("DRY BULK TIME CHARTER ESTIMATES (USD/PER DAY PRO RATA)", (row) => {
-        const tds = [];
-        periods.forEach((p, i) => {
-          const atl = parseMoneyCell(row[p.atlVal]);
-          const pac = parseMoneyCell(row[p.pacVal]);
-          const atlChg = parsePctCell(row[p.atlChg]);
-          const pacChg = parsePctCell(row[p.pacChg]);
+      // Rates
+      host.appendChild(makeOceanTableCard("DRY BULK TIME CHARTER ESTIMATES: ATLANTIC (USD/DAY PRO RATA)", "ATL", "rate"));
+      host.appendChild(makeOceanTableCard("DRY BULK TIME CHARTER ESTIMATES: PACIFIC (USD/DAY PRO RATA)", "PAC", "rate"));
 
-          tds.push(markerCell(atlChg));
-          const tdAtl = document.createElement("td");
-          tdAtl.textContent = atl === null ? "—" : `$${fmtGBPishNumber(atl)}`;
-          tds.push(tdAtl);
-
-          tds.push(markerCell(pacChg));
-          const tdPac = document.createElement("td");
-          tdPac.textContent = pac === null ? "—" : `$${fmtGBPishNumber(pac)}`;
-          if (i < periods.length - 1) tdPac.classList.add("periodSeparator");
-          tds.push(tdPac);
-        });
-        return tds;
-      });
-
-      const table2 = makeTableCard("DRY BULK TIME CHARTER ESTIMATES (% CHANGE FROM PREVIOUS WEEK)", (row) => {
-        const tds = [];
-        periods.forEach((p, i) => {
-          const atlPct = parsePctCell(row[p.atlChg]);
-          const pacPct = parsePctCell(row[p.pacChg]);
-          
-          tds.push(markerCell(atlPct));
-          const tdAtl = document.createElement("td");
-          tdAtl.textContent = (atlPct === null) ? "—" : `${atlPct}%`;
-          tds.push(tdAtl);
-
-          tds.push(markerCell(pacPct));
-          const tdPac = document.createElement("td");
-          tdPac.textContent = (pacPct === null) ? "—" : `${pacPct}%`;
-          if (i < periods.length - 1) tdPac.classList.add("periodSeparator");
-          tds.push(tdPac);
-        });
-        return tds;
-      });
-
-      host.appendChild(table1);
-      host.appendChild(table2);
+      // % Change
+      host.appendChild(makeOceanTableCard("DRY BULK TIME CHARTER ESTIMATES: ATLANTIC (% CHANGE FROM PREVIOUS WEEK)", "ATL", "pct"));
+      host.appendChild(makeOceanTableCard("DRY BULK TIME CHARTER ESTIMATES: PACIFIC (% CHANGE FROM PREVIOUS WEEK)", "PAC", "pct"));
     }
+
 
 // --- RENDER TANKER TABLES (NEW) ---
 function renderTankerTables(tableRows) {
@@ -661,6 +669,11 @@ function renderTankerTables(tableRows) {
     table.appendChild(tbody);
     wrap.appendChild(table);
     card.appendChild(wrap);
+
+    const foot = document.createElement("p");
+    foot.className = "tableFootnote";
+    foot.textContent = "* Eco tonnage with Scrubber fitted.";
+    card.appendChild(foot);
 
     return card;
   }
@@ -822,8 +835,8 @@ async function renderDryBulkTrendCharts() {
         });
       }
 
-      createTrendCard("Dry Bulk 1Yr TC Rates: Atlantic Annual Trend", atlData);
-      createTrendCard("Dry Bulk 1Yr TC Rates: Pacific Annual Trend", pacData);
+      createTrendCard("DRY BULK 1YR TC RATES: ATLANTIC ANNUAL TREND", atlData);
+      createTrendCard("DRY BULK 1YR TC RATES: PACIFIC ANNUAL TREND", pacData);
     }
 
 // --- RENDER TANKER TREND CHARTS (NEW) ---
