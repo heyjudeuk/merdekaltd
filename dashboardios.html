@@ -1466,6 +1466,21 @@
     init();
 
   </script>
+
+  <script>
+  function sendHeight() {
+    const h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: "resize", height: h }, "*");
+  }
+
+  window.addEventListener("load", sendHeight);
+  window.addEventListener("resize", sendHeight);
+
+  // In case charts load async
+  setTimeout(sendHeight, 500);
+  setTimeout(sendHeight, 1500);
+</script>
+
 </body>
 
 </html>
