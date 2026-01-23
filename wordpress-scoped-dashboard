@@ -1015,7 +1015,7 @@
                     return isChangeKey(k) && (s.includes(base + "year") || s.includes(base + "yr") || s.includes("year" + base) || s.includes("yr" + base));
                 }) || null;
 
-                return { yr, label: yr + " Y" + ((yr === 3 || yr === 5) ? "*" : ""), valKey: o.k, chgKey: chg };
+                return { yr, label: yr + " Year" + ((yr === 3 || yr === 5) ? "*" : ""), valKey: o.k, chgKey: chg };
             });
 
             function makeTableCard(title, makeBodyFn) {
