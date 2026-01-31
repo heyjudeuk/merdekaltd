@@ -93,7 +93,7 @@
         font-size: 22px;
         letter-spacing: 0.6px;
         font-weight: 750;
-        color: var(--text);
+        color: #D5A62B;
         text-transform: uppercase;
     }
 
@@ -225,6 +225,18 @@
         font-size: 13px;
         font-weight: 650;
         color: var(--text);
+    }
+
+    #alibraDashboard .oceanWord {
+        font-weight: 700;
+    }
+
+    #alibraDashboard .oceanWord.atl {
+        color: #7FEDDF;
+    }
+
+    #alibraDashboard .oceanWord.pac {
+        color: #00A0A9;
     }
 
 
@@ -498,7 +510,7 @@
         font-weight: 500;
         letter-spacing: 0.6px;
         text-transform: uppercase;
-        color: var(--text);
+        color: #D5A62B;
         opacity: 1;
     }
 
@@ -887,7 +899,14 @@
 
                 const h = document.createElement("h3");
                 h.className = "tableTitle";
-                h.textContent = title;
+                const oceanLabel = (ocean === "ATL") ? "ATLANTIC" : "PACIFIC";
+                const parts = title.split(oceanLabel);
+                h.append(parts[0] || "");
+                const oceanSpan = document.createElement("span");
+                oceanSpan.className = "oceanWord " + (ocean === "ATL" ? "atl" : "pac");
+                oceanSpan.textContent = oceanLabel;
+                h.appendChild(oceanSpan);
+                h.append(parts[1] || "");
                 card.appendChild(h);
 
                 const wrap = document.createElement("div");
@@ -1137,7 +1156,17 @@
             const atlData = Papa.parse(atlText, { header: true, skipEmptyLines: true }).data;
             const pacData = Papa.parse(pacText, { header: true, skipEmptyLines: true }).data;
 
-            function createTrendCard(title, dataRows) {
+            function setOceanTitle(el, title, oceanLabel) {
+                const parts = title.split(oceanLabel);
+                el.append(parts[0] || "");
+                const oceanSpan = document.createElement("span");
+                oceanSpan.className = "oceanWord " + (oceanLabel === "ATLANTIC" ? "atl" : "pac");
+                oceanSpan.textContent = oceanLabel;
+                el.appendChild(oceanSpan);
+                el.append(parts[1] || "");
+            }
+
+            function createTrendCard(title, dataRows, oceanLabel) {
                 const card = document.createElement("div");
                 card.className = "card dryBulkChart";
 
@@ -1145,7 +1174,7 @@
                 titleRow.className = "titleRow";
                 const h = document.createElement("div");
                 h.className = "title";
-                h.textContent = title;
+                setOceanTitle(h, title, oceanLabel);
                 titleRow.appendChild(h);
                 card.appendChild(titleRow);
 
@@ -1244,8 +1273,8 @@
                 });
             }
 
-            createTrendCard("DRY BULK 1YR TC RATES: ATLANTIC ANNUAL TREND", atlData);
-            createTrendCard("DRY BULK 1YR TC RATES: PACIFIC ANNUAL TREND", pacData);
+            createTrendCard("DRY BULK 1YR TC RATES: ATLANTIC ANNUAL TREND", atlData, "ATLANTIC");
+            createTrendCard("DRY BULK 1YR TC RATES: PACIFIC ANNUAL TREND", pacData, "PACIFIC");
         }
 
         // --- RENDER TANKER TREND CHARTS (NEW) ---
