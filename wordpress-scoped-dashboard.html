@@ -763,6 +763,21 @@
             return new Intl.NumberFormat("en-GB", { maximumFractionDigits: 0 }).format(n);
         }
 
+        function fmtGBPCompact(n) {
+            if (n === null || n === undefined) return "—";
+            return new Intl.NumberFormat("en-GB", {
+                notation: "compact",
+                compactDisplay: "short",
+                maximumFractionDigits: 0
+            }).format(n);
+        }
+
+        function fmtMonthYearLabel(label) {
+            const s = String(label ?? "").trim();
+            const m = s.match(/^\d{1,2}\s+([A-Za-z]{3}\s+\d{4})$/);
+            return m ? m[1] : s;
+        }
+
         function fmtSignedUSD(n) {
             if (n === null || n === undefined) return "—";
             const sign = n > 0 ? "+" : (n < 0 ? "−" : "");
@@ -1166,7 +1181,7 @@
                 el.append(parts[1] || "");
             }
 
-            function createTrendCard(title, dataRows, oceanLabel) {
+            function createTrendCard(title, dataRows, oceanLabel, maxXTicks = 8) {
                 const card = document.createElement("div");
                 card.className = "card dryBulkChart";
 
@@ -1259,13 +1274,17 @@
                             x: {
                                 grid: { color: getCss("--grid") },
                                 ticks: {
-                                    maxTicksLimit: 8,
-                                    maxRotation: 0
+                                    maxTicksLimit: maxXTicks,
+                                    maxRotation: 0,
+                                    callback: function (value) {
+                                        const label = this.getLabelForValue ? this.getLabelForValue(value) : value;
+                                        return fmtMonthYearLabel(label);
+                                    }
                                 }
                             },
                             y: {
                                 grid: { color: getCss("--grid") },
-                                ticks: { callback: (val) => "$" + fmtUSD(val) },
+                                ticks: { callback: (val) => "£" + fmtGBPCompact(val) },
                                 title: { display: true, text: "USD/day" }
                             }
                         }
@@ -1274,7 +1293,7 @@
             }
 
             createTrendCard("DRY BULK 1YR TC RATES: ATLANTIC ANNUAL TREND", atlData, "ATLANTIC");
-            createTrendCard("DRY BULK 1YR TC RATES: PACIFIC ANNUAL TREND", pacData, "PACIFIC");
+            createTrendCard("DRY BULK 1YR TC RATES: PACIFIC ANNUAL TREND", pacData, "PACIFIC", 9);
         }
 
         // --- RENDER TANKER TREND CHARTS (NEW) ---
@@ -1293,7 +1312,7 @@
             const oneData = Papa.parse(oneText, { header: true, skipEmptyLines: true }).data;
             const fiveData = Papa.parse(fiveText, { header: true, skipEmptyLines: true }).data;
 
-            function createTankerTrendCard(title, dataRows) {
+            function createTankerTrendCard(title, dataRows, maxXTicks = 8) {
                 const card = document.createElement("div");
                 card.className = "card tankerChart";
 
@@ -1370,11 +1389,18 @@
                         scales: {
                             x: {
                                 grid: { color: getCss("--grid") },
-                                ticks: { maxTicksLimit: 8, maxRotation: 0 }
+                                ticks: {
+                                    maxTicksLimit: maxXTicks,
+                                    maxRotation: 0,
+                                    callback: function (value) {
+                                        const label = this.getLabelForValue ? this.getLabelForValue(value) : value;
+                                        return fmtMonthYearLabel(label);
+                                    }
+                                }
                             },
                             y: {
                                 grid: { color: getCss("--grid") },
-                                ticks: { callback: (val) => "$" + fmtUSD(val) },
+                                ticks: { callback: (val) => "£" + fmtGBPCompact(val) },
                                 title: { display: true, text: "USD/day" }
                             }
                         }
@@ -1383,7 +1409,7 @@
             }
 
             createTankerTrendCard("TANKER 1YR TC RATES ANNUAL TREND", oneData);
-            createTankerTrendCard("TANKER 3YR TC RATES ANNUAL TREND", fiveData);
+            createTankerTrendCard("TANKER 3YR TC RATES ANNUAL TREND", fiveData, 9);
         }
 
         async function loadLastUpdatedFromSheet() {
