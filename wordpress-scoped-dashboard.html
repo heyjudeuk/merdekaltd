@@ -1181,7 +1181,7 @@
                 el.append(parts[1] || "");
             }
 
-            function createTrendCard(title, dataRows, oceanLabel, maxXTicks = 8) {
+            function createTrendCard(title, dataRows, oceanLabel, maxXTicks = 9) {
                 const card = document.createElement("div");
                 card.className = "card dryBulkChart";
 
@@ -1312,7 +1312,7 @@
             const oneData = Papa.parse(oneText, { header: true, skipEmptyLines: true }).data;
             const fiveData = Papa.parse(fiveText, { header: true, skipEmptyLines: true }).data;
 
-            function createTankerTrendCard(title, dataRows, maxXTicks = 8) {
+            function createTankerTrendCard(title, dataRows, maxXTicks = 9) {
                 const card = document.createElement("div");
                 card.className = "card tankerChart";
 
