@@ -232,7 +232,7 @@
     }
 
     #alibraDashboard .oceanWord.atl {
-        color: #7FEDDF;
+        color: #4ade80;
     }
 
     #alibraDashboard .oceanWord.pac {
@@ -692,7 +692,7 @@
 
         // Tanker Trend Charts (Annual)
         const TANKER_TREND_1Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=137918187&single=true&output=csv";
-        const TANKER_TREND_5Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=2023480649&single=true&output=csv";
+        const TANKER_TREND_5Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=1501135879&single=true&output=csv";
 
         const statusEl = document.getElementById("status");
         const chartsEl = document.getElementById("charts");
@@ -1383,7 +1383,7 @@
             }
 
             createTankerTrendCard("TANKER 1YR TC RATES ANNUAL TREND", oneData);
-            createTankerTrendCard("TANKER 5YR TC RATES ANNUAL TREND", fiveData);
+            createTankerTrendCard("TANKER 3YR TC RATES ANNUAL TREND", fiveData);
         }
 
         async function loadLastUpdatedFromSheet() {
