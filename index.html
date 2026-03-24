@@ -1,295 +1,1738 @@
+<meta charset="UTF-8" />
+<title>ALIBRA SHIPPING WEEKLY TIME CHARTER RATES</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="utf-t">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Merdeka Ltd — Operating company for echo3.co &amp; bespokecurtains.uk</title>
-  <meta name="description" content="Merdeka Ltd is the operating company for echo3.co and bespokecurtains.uk.">
-  <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#191d1e">
-  <style>
-/* Exact gradient background as requested */
-html, body{
-  width:100%; height:100%; padding:0; margin:0; overflow: hidden;
-  background: #191d1e; /* Old browsers */
-  background: -moz-linear-gradient(0deg,  #191d1e 50%, #283139 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, right bottom, color-stop(50%,#191d1e), color-stop(100%,#283139)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* IE10+ */
-  background: linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#191d1e', endColorstr='#283139',GradientType=1 ); /* IE6-9 */
-  background-attachment: fixed
-}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-#projector {
-  position:absolute; top:0; left:0; width:100%; height:100%;
-  display:block; z-index:1;
-}
+<style>
+    #alibraDashboard {
+        --bg: #0b1220;
+        --panel: #0f1a2e;
+        --panel2: #0c1628;
+        --text: #e6edf6;
+        --muted: #9db0c7;
+        --grid: rgba(157, 176, 199, 0.16);
+        --border: rgba(157, 176, 199, 0.14);
+        --shadow: rgba(0, 0, 0, 0.22);
 
-/* Responsive centred stack */
-.center-wrap{
-  position:absolute; left:50%; top:50%;
-  transform: translate(-50%, -50%);
-  z-index:2; text-align:center;
-  padding: 0 4vw;
-  max-width: 90vw;
-}
+        --accent: #7aa2ff;
+        --accentFill: rgba(122, 162, 255, 0.18);
 
-/* SVG responsiveness: constrain width with clamp; height auto via viewBox */
-.logo{
-  margin: 0 auto;
-  width: clamp(220px, 42vw, 520px);
-}
-.logo svg{ width:100%; height:auto; display:block; fill:#ffffff; }
-
-.strapline{
-a {
-  color: #6fd2f3;
-  text-underline-offset: 2px;
-  text-decoration: none;
-}
-
-a:hover,
-.infobar a:hover {
-  color: #93e9f3;
-  text-decoration: underline;
-}
-  margin-top:14px; color:#9aa3b2;
-  font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica Neue,Arial;
-  font-size: clamp(15px,2vw,18px);
-}
-
-.infobar{
- 
-  position:fixed; left:0; right:0; bottom:0; padding:10px 14px; z-index:2;
-  color:#9aa3b2; text-align:center; line-height:1.5;
-  font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica Neue,Arial;
-  font-size: clamp(11px,1.6vw,14px);
-  background: linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.15), transparent);
-  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-}
-.infobar a {
-  color: #ffffff;
-  text-underline-offset: 2px;
-  text-decoration: none; /* optional, removes underline by default */
-}
-
-.infobar a:hover {
-  color: #93e9f3; /* lighter blue on hover */
-  text-decoration: underline; /* optional underline on hover */
-}
-.nowrap{white-space:nowrap;}
-  </style>
-</head>
-<body>
-  <canvas id="projector"></canvas>
-
-  <div class="center-wrap" aria-label="Merdeka Ltd">
-    <div class="logo" id="logo" aria-label="Merdeka Ltd logo">
-      <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 370 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g transform="matrix(0.709654,0,0,0.709654,-8.48636,-86.2154)">
-        <path d="M281.616,309.029L262.248,309.091C262.248,309.091 261.207,292.987 257.633,276.674C255.493,266.911 252.653,256.946 248.092,251.246C238.357,239.077 181.947,189.521 153.497,164.769L153.698,206.677L153.637,207.233C153.637,207.233 152.947,219.304 165.8,230.805C183.021,246.213 204.252,264.574 213.322,273.94C216.749,277.478 219.328,281.746 220.225,287.003C221.112,292.207 218.703,305.482 218.703,305.482L211.425,298.837C211.425,298.837 169.835,260.864 152.657,245.494C133.232,228.113 133.701,209.248 133.982,205.702L133.579,121.489L149.976,135.637C149.976,135.637 250.049,222.139 263.484,238.933C268.147,244.762 271.924,253.684 274.654,263.44C280.355,283.812 281.616,309.029 281.616,309.029Z"/>
-        <g transform="matrix(-1,0,0,1,544.947,0)">
-            <path d="M281.616,309.029L262.248,309.091C262.248,309.091 261.207,292.987 257.633,276.674C255.493,266.911 252.653,256.946 248.092,251.246C238.357,239.077 181.947,189.521 153.497,164.769L153.698,206.677L153.637,207.233C153.637,207.233 152.947,219.304 165.8,230.805C183.021,246.213 204.252,264.574 213.322,273.94C216.749,277.478 219.328,281.746 220.225,287.003C221.112,292.207 218.703,305.482 218.703,305.482L211.425,298.837C211.425,298.837 169.835,260.864 152.657,245.494C133.232,228.113 133.701,209.248 133.982,205.702L133.579,121.489L149.976,135.637C149.976,135.637 250.049,222.139 263.484,238.933C268.147,244.762 271.924,253.684 274.654,263.44C280.355,283.812 281.616,309.029 281.616,309.029Z"/>
-        </g>
-    </g>
-    <g transform="matrix(5.85839,0,0,5.85839,-621.675,-2112.09)">
-        <g transform="matrix(12,0,0,12,105.121,394.625)">
-            <path d="M0.083,-0L0.083,-0.7L0.217,-0.7L0.515,-0.206L0.444,-0.206L0.737,-0.7L0.87,-0.7L0.872,-0L0.72,-0L0.719,-0.467L0.747,-0.467L0.513,-0.074L0.44,-0.074L0.201,-0.467L0.235,-0.467L0.235,-0L0.083,-0Z" style="fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(12,0,0,12,116.581,394.625)">
-            <path d="M0.083,-0L0.083,-0.7L0.612,-0.7L0.612,-0.57L0.244,-0.57L0.244,-0.13L0.625,-0.13L0.625,-0L0.083,-0ZM0.232,-0.292L0.232,-0.418L0.569,-0.418L0.569,-0.292L0.232,-0.292Z" style="fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(12,0,0,12,124.633,394.625)">
-            <path d="M0.083,-0L0.083,-0.7L0.382,-0.7C0.479,-0.7 0.555,-0.677 0.609,-0.632C0.663,-0.587 0.69,-0.525 0.69,-0.446C0.69,-0.394 0.678,-0.349 0.653,-0.312C0.629,-0.274 0.594,-0.245 0.548,-0.225C0.503,-0.205 0.448,-0.195 0.386,-0.195L0.173,-0.195L0.245,-0.266L0.245,-0L0.083,-0ZM0.529,-0L0.353,-0.254L0.526,-0.254L0.703,-0L0.529,-0ZM0.245,-0.248L0.173,-0.324L0.377,-0.324C0.427,-0.324 0.464,-0.335 0.489,-0.357C0.514,-0.378 0.526,-0.408 0.526,-0.446C0.526,-0.485 0.514,-0.515 0.489,-0.536C0.464,-0.557 0.427,-0.568 0.377,-0.568L0.173,-0.568L0.245,-0.645L0.245,-0.248Z" style="fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(12,0,0,12,133.453,394.625)">
-            <path d="M0.083,-0L0.083,-0.7L0.401,-0.7C0.477,-0.7 0.544,-0.686 0.602,-0.657C0.66,-0.628 0.705,-0.587 0.738,-0.535C0.77,-0.483 0.787,-0.421 0.787,-0.35C0.787,-0.279 0.77,-0.218 0.738,-0.165C0.705,-0.113 0.66,-0.072 0.602,-0.043C0.544,-0.014 0.477,-0 0.401,-0L0.083,-0ZM0.245,-0.133L0.393,-0.133C0.44,-0.133 0.48,-0.142 0.515,-0.159C0.549,-0.177 0.575,-0.202 0.594,-0.235C0.613,-0.267 0.623,-0.306 0.623,-0.35C0.623,-0.395 0.613,-0.433 0.594,-0.466C0.575,-0.498 0.549,-0.523 0.515,-0.541C0.48,-0.558 0.44,-0.567 0.393,-0.567L0.245,-0.567L0.245,-0.133Z" style="fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(12,0,0,12,143.365,394.625)">
-            <path d="M0.083,-0L0.083,-0.7L0.612,-0.7L0.612,-0.57L0.244,-0.57L0.244,-0.13L0.625,-0.13L0.625,-0L0.083,-0ZM0.232,-0.292L0.232,-0.418L0.569,-0.418L0.569,-0.292L0.232,-0.292Z" style="fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(12,0,0,12,151.417,394.625)">
-            <path d="M0.228,-0.16L0.219,-0.347L0.554,-0.7L0.734,-0.7L0.432,-0.375L0.342,-0.279L0.228,-0.16ZM0.083,-0L0.083,-0.7L0.244,-0.7L0.244,-0L0.083,-0ZM0.562,-0L0.313,-0.305L0.419,-0.42L0.751,-0L0.562,-0Z" style="fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(12,0,0,12,159.925,394.625)">
-            <path d="M-0.009,-0L0.303,-0.7L0.463,-0.7L0.776,-0L0.606,-0L0.35,-0.618L0.414,-0.618L0.157,-0L-0.009,-0ZM0.147,-0.15L0.19,-0.273L0.55,-0.273L0.594,-0.15L0.147,-0.15Z" style="fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(12,0,0,12,169.117,394.625)">
-        </g>
-    </g>
-</svg>
-
-    </div>
-    <p class="strapline">
-      Merdeka Ltd is the operating company for
-      <a href="https://echo3.co/" target="_blank" rel="noopener">echo3.co</a> and
-      <a href="https://bespokecurtains.uk/" target="_blank" rel="noopener">bespokecurtains.uk</a>.
-    </p>
-  </div>
-
-  <footer class="infobar">
-    <span>Legal Name: <strong>Merdeka Ltd</strong></span> /
-    <span>Company number: <strong>07488028</strong> (Registered in England &amp; Wales)</span> /
-    <span>Registered office: <span class="nowrap">10 Southwood Road, Farnborough, England, GU14 0JQ</span> — This address is for statutory purposes only</span> /
-    <span>Contact: <a href="mailto:info@merdekaltd.co.uk">info@merdekaltd.co.uk</a> • <span class="nowrap">+44 (0)7413 678040</span></span> /
-    <span>© 2025 Merdeka Ltd</span>
-  </footer>
-
-  <script>
-/* Offline Canvas engine with tweaks:
-   - Lights reduced/offset to avoid giant centre blobs
-   - Particles sizes reduced for medium/large
-   - Reset composite mode before particles
-*/
-(function(){'use strict';
-  var canvas = document.getElementById('projector');
-  var ctx = canvas.getContext('2d');
-  var DPR = Math.max(1, window.devicePixelRatio || 1);
-  var W, H;
-
-  function resize() {
-    var bw = document.documentElement.clientWidth;
-    var bh = document.documentElement.clientHeight;
-    W = canvas.width = Math.floor(bw * DPR);
-    H = canvas.height = Math.floor(bh * DPR);
-    canvas.style.width = bw + 'px';
-    canvas.style.height = bh + 'px';
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  // Lights: smaller, lower alpha, and offset away from exact centre
-  // [FIXED: Removed the 3 spotlights as requested]
-  var lights = [];
-
-  function ellipsePath(x, y, rw, rh) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.scale(rw, rh);
-    ctx.beginPath();
-    ctx.arc(0, 0, 1, 0, Math.PI*2);
-    ctx.restore();
-  }
-
-  // particles
-  function range(min, max) { return min + (max - min) * Math.random(); }
-  function wrange(to, from, picks, band, strength) {
-    if (Math.random() <= (strength || 0)) { return range(band[0], band[1]); }
-    return range(to, from);
-  }
-  function clamp(v,a,b){return v<a?a:(v>b?b:v);}
-
-  var particleSets = [
-    { id:'small',  num:320, bw:3,  amax:0.35, areaH:.5, color:'#0cdbf3', fill:false },
-    { id:'medium', num:120, bw:6,  amax:0.28, areaH:1,  color:'#6fd2f3', fill:true  },
-    { id:'large',  num:12,  bw:16, amax:0.18, areaH:1,  color:'#93e9f3', fill:true  }
-  ];
-
-  var particles = [];
-  function initParticle(p, areaH) {
-    p.speed = range(1,3);
-    p.initY = wrange(0, H, 1, [ H*(2-areaH/2)/4, H*(2+areaH/2)/4 ], 0.8 );
-    p.initX = wrange(0, W, 1, [ W/4, W*3/4 ], 0.6 );
-    p.x = p.initX; p.y = p.initY;
-    p.scale = range(0.3, 1);
-    p.tx = range(p.initX - p.dist, p.initX + p.dist);
-    p.ty = range(p.initY - p.dist, p.initY + p.dist);
-    p.t = Math.random()*Math.PI*2;
-    p.alpha = range(0.05, p.amax);
-    p.da = (Math.random()<.5?-1:1) * range(0.002, 0.01);
-    p.v = range(0.2, 0.6);
-  }
-
-  function createParticles() {
-    particles.length = 0;
-    for (var i=0;i<particleSets.length;i++) {
-      var s = particleSets[i];
-      for (var j=0;j<s.num;j++) {
-        var p = {
-          bw:s.bw, amax:s.amax, areaH:s.areaH, color:s.color, fill:s.fill,
-          dist: s.bw*2
-        };
-        initParticle(p, s.areaH);
-        particles.push(p);
-      }
-    }
-  }
-  createParticles();
-
-  var last = performance.now();
-  function tick(now) {
-    var dt = clamp((now - last)/16.67, 0.2, 2);
-    last = now;
-    render(dt);
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-
-  function render(dt) {
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.clearRect(0,0,W,H);
-
-    // Lights layer (additive glow)
-    ctx.globalCompositeOperation = 'lighter';
-    for (var i=0;i<lights.length;i++) {
-      var L = lights[i];
-      L.t += 0.0025 * (i+1) * dt;
-      var cx = W/2 + (L.ox*DPR) + Math.cos(L.t + i)*70*DPR;
-      var cy = H/2 + (L.oy*DPR) + Math.sin(L.t*1.2 + i)*44*DPR;
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(Math.sin(L.t*0.5)*0.35);
-      ctx.globalAlpha = L.a;
-      ctx.shadowColor = L.color;
-      ctx.shadowBlur = Math.max(L.w, L.h) * 1.0;
-      ctx.fillStyle = L.color;
-      ellipsePath(0,0, L.w*DPR, L.h*DPR);
-      ctx.fill();
-      ctx.restore();
+        --pos: #4ade80;
+        --neg: #fb7185;
+        --neu: #a3b3c7;
+        --divider: rgba(157, 176, 199, 0.4);
     }
 
-    // Reset to normal mode before drawing particles
-    ctx.globalCompositeOperation = 'source-over';
 
-    // Particles
-    for (var k=0;k<particles.length;k++) {
-      var p = particles[k];
-      var ease = 0.02 * dt;
-      p.x += (p.tx - p.x) * ease;
-      p.y += (p.ty - p.y) * ease;
-      if (Math.abs(p.x - p.tx) < 1*DPR && Math.abs(p.y - p.ty) < 1*DPR) {
-        p.tx = range(p.initX - p.dist, p.initX + p.dist);
-        p.ty = range(p.initY - p.dist, p.initY + p.dist);
-      }
-      p.alpha += p.da * dt;
-      if (p.alpha > p.amax || p.alpha < 0.05) { p.da *= -1; p.alpha = clamp(p.alpha, 0.05, p.amax); }
-
-      ctx.save();
-      ctx.globalAlpha = p.alpha;
-      ctx.translate(p.x, p.y);
-      if (p.fill) {
-        ctx.fillStyle = p.color;
-        ctx.shadowColor = p.color;
-        ctx.shadowBlur = (p.bw*DPR)/1.6;
-        ctx.beginPath();
-        ctx.arc(0, 0, (p.bw*DPR), 0, Math.PI*2);
-        ctx.fill();
-      } else {
-        ctx.strokeStyle = p.color;
-        ctx.lineWidth = DPR;
-        ctx.beginPath();
-        ctx.arc(0, 0, (p.bw*DPR), 0, Math.PI*2);
-        ctx.stroke();
-      }
-      ctx.restore();
+    #alibraDashboard,
+    #alibraDashboard *,
+    #alibraDashboard *::before,
+    #alibraDashboard *::after {
+        box-sizing: border-box;
     }
-  }
-})();
-  </script>
-</body>
+
+
+    #alibraDashboard {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+
+    #alibraDashboard canvas {
+        display: block;
+        max-width: 100%;
+    }
+
+    /* Default chart canvas sizing (prevents responsive height feedback loops on iOS) */
+    #alibraDashboard .card canvas {
+        width: 100% !important;
+        height: 260px !important;
+    }
+
+    /* Forward-curve charts manage their own height via .fcChartBox */
+    #alibraDashboard .fcChartBox canvas {
+        height: 100% !important;
+    }
+
+
+    #alibraDashboard {
+        padding: 18px;
+        background: radial-gradient(1200px 600px at 15% 0%, #111f3a 0%, var(--bg) 60%);
+        color: var(--text);
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+
+    #alibraDashboard header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 18px;
+        text-align: center;
+    }
+
+    #alibraDashboard header::after {
+        content: "";
+        display: block;
+        width: 140px;
+        height: 1px;
+        margin-top: 8px;
+        background: linear-gradient(90deg,
+                transparent,
+                var(--divider),
+                transparent);
+    }
+
+
+
+    #alibraDashboard h1 {
+        margin: 0;
+        font-size: 22px;
+        letter-spacing: 0.6px;
+        font-weight: 750;
+        color: #D5A62B;
+        text-transform: uppercase;
+    }
+
+
+    #alibraDashboard .sub {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.35;
+    }
+
+    #alibraDashboard .status {
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 14px;
+    }
+
+    #alibraDashboard .status {
+        margin-top: 20px;
+        /* breathing space from charts */
+        margin-bottom: 24px;
+    }
+
+
+    #alibraDashboard .grid {
+        display: grid;
+        gap: 14px;
+    }
+
+    @media (min-width: 900px) {
+        #alibraDashboard .grid {
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+        }
+    }
+
+    #alibraDashboard .card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 14px 12px 14px;
+        background: linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
+        box-shadow: 0 10px 30px var(--shadow);
+    }
+
+    #alibraDashboard .titleRow {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    #alibraDashboard .title {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 650;
+        color: var(--text);
+        line-height: 1.2;
+    }
+
+    #alibraDashboard .meta {
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    #alibraDashboard .metrics {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    @media (min-width: 520px) {
+        #alibraDashboard .metrics {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    #alibraDashboard .pill {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 10px 12px;
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    #alibraDashboard .pill .k {
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.25px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+
+    #alibraDashboard .pill .v {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1.2;
+        word-break: break-word;
+    }
+
+    #alibraDashboard .v.pos {
+        color: var(--pos);
+    }
+
+    #alibraDashboard .v.neg {
+        color: var(--neg);
+    }
+
+    #alibraDashboard .error {
+        border-color: rgba(255, 90, 122, 0.35);
+        background: rgba(255, 90, 122, 0.10);
+        color: #ffd2dc;
+    }
+
+    #alibraDashboard .tableCard {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        background: linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+    }
+
+    #alibraDashboard .tableTitle {
+        margin: 0 0 10px 0;
+        font-size: 13px;
+        font-weight: 650;
+        color: var(--text);
+    }
+
+    #alibraDashboard .oceanWord {
+        font-weight: 700;
+    }
+
+    #alibraDashboard .oceanWord.atl {
+        color: #4ade80;
+    }
+
+    #alibraDashboard .oceanWord.pac {
+        color: #00A0A9;
+    }
+
+
+    #alibraDashboard .tableNote {
+        margin: -6px 0 10px 0;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.3;
+    }
+
+    #alibraDashboard .tableWrap {
+        overflow-x: auto;
+        /* allow horizontal scroll on very narrow screens */
+        -webkit-overflow-scrolling: touch;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        margin-bottom: 10px;
+        /* space before footnotes */
+    }
+
+    #alibraDashboard .tableFootnote {
+        margin: 0;
+        padding-top: 8px;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.3;
+    }
+
+    #alibraDashboard .tceTable {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    #alibraDashboard .tceTable th,
+    #alibraDashboard .tceTable td {
+        padding: 10px 10px;
+        border-bottom: 1px solid var(--border);
+        text-align: right;
+        font-size: 12px;
+    }
+
+    #alibraDashboard .tceTable th {
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted);
+        font-weight: 650;
+    }
+
+    #alibraDashboard .periodSeparator {
+        border-right: 1px solid var(--divider) !important;
+    }
+
+    #alibraDashboard .tceTable thead tr:nth-child(1) th {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+    }
+
+    #alibraDashboard .tceTable th:first-child,
+    #alibraDashboard .tceTable td:first-child {
+        text-align: left;
+        position: sticky;
+        left: 0;
+        background: linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
+        z-index: 2;
+        border-right: 1px solid var(--divider);
+    }
+
+    #alibraDashboard .tceTable thead th:first-child {
+        z-index: 3;
+    }
+
+    #alibraDashboard .markerCol {
+        width: 1ch;
+        padding-right: 2px !important;
+        padding-left: 8px !important;
+        text-align: right !important;
+        font-size: 11px;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    #alibraDashboard .markerCol+td {
+        padding-left: 4px !important;
+        padding-right: 12px !important;
+        text-align: left !important;
+        white-space: nowrap;
+    }
+
+    #alibraDashboard .pos {
+        color: var(--pos);
+        font-weight: 700;
+    }
+
+    #alibraDashboard .neg {
+        color: var(--neg);
+        font-weight: 700;
+    }
+
+    #alibraDashboard .neu {
+        color: #ffd54a;
+        font-weight: 700;
+    }
+
+    #alibraDashboard .cellSubtle {
+        color: var(--muted);
+        font-weight: 600;
+    }
+
+    #alibraDashboard .tablesGrid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    @media (min-width: 1100px) {
+        #alibraDashboard .tablesGrid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    #alibraDashboard .periodHeader {
+        text-align: center !important;
+        letter-spacing: 0.4px;
+    }
+
+    #alibraDashboard .markerUp {
+        color: var(--pos);
+        font-weight: 800;
+    }
+
+    #alibraDashboard .markerDown {
+        color: var(--neg);
+        font-weight: 800;
+    }
+
+    /* Ensure cards never exceed their grid column on iOS/WebKit */
+    #alibraDashboard .card,
+    #alibraDashboard .tableCard {
+        max-width: 100%;
+    }
+
+    #alibraDashboard .tableCard {
+        overflow: hidden;
+    }
+
+    #alibraDashboard .tableWrap {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Forward-curve only wrapper to keep Chart.js sizing accurate */
+    #alibraDashboard .fcChartBox {
+        height: 260px;
+        width: 100%;
+        position: relative;
+    }
+
+    #alibraDashboard .fcChartBox canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+    }
+
+    /* =========================
+   DRY BULK TABLE GREEN THEME
+   ========================= */
+
+    #alibraDashboard .dryBulk .tceTable thead th {
+        background: rgba(74, 222, 128, 0.18);
+        /* soft green */
+        color: #eafff1;
+    }
+
+    #alibraDashboard .dryBulk .tceTable thead tr:nth-child(1) th {
+        background: rgba(74, 222, 128, 0.25);
+        /* stronger for PERIOD row */
+    }
+
+    #alibraDashboard .dryBulk .tceTable th {
+        border-bottom-color: rgba(74, 222, 128, 0.35);
+    }
+
+    #alibraDashboard .dryBulk .periodSeparator {
+        border-right-color: rgba(74, 222, 128, 0.45) !important;
+    }
+
+    /* =========================
+   DRY BULK CHART GREEN CARDS
+   ========================= */
+
+    #alibraDashboard .dryBulkChart {
+        background: linear-gradient(180deg,
+                rgba(74, 222, 128, 0.14) 0%,
+                rgba(15, 26, 46, 0.95) 65%);
+        border-color: rgba(74, 222, 128, 0.35);
+    }
+
+    #alibraDashboard .dryBulkChart .title {
+        color: #d1fae5;
+    }
+
+    /* =========================
+   TANKER TABLE BLUE THEME
+   ========================= */
+
+    #alibraDashboard .tanker .tceTable thead th {
+        background: rgba(96, 165, 250, 0.22);
+        /* brighter blue */
+        color: #eef4ff;
+    }
+
+    #alibraDashboard .tanker .tceTable thead tr:nth-child(1) th {
+        background: rgba(96, 165, 250, 0.30);
+        /* stronger PERIOD row */
+    }
+
+    #alibraDashboard .tanker .tceTable th {
+        border-bottom-color: rgba(96, 165, 250, 0.45);
+    }
+
+    #alibraDashboard .tanker .periodSeparator {
+        border-right-color: rgba(96, 165, 250, 0.55) !important;
+    }
+
+    /* =========================
+   TANKER CHART BLUE CARDS
+   ========================= */
+
+    #alibraDashboard .tankerChart {
+        background: linear-gradient(180deg,
+                rgba(96, 165, 250, 0.16) 0%,
+                rgba(15, 26, 46, 0.95) 65%);
+        border-color: rgba(96, 165, 250, 0.40);
+    }
+
+    #alibraDashboard .tankerChart .title {
+        color: #dbeafe;
+    }
+
+    /* =========================
+   SECTION HEADERS (MATCH MAIN HEADER)
+   ========================= */
+
+    #alibraDashboard .sectionHeader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        margin: 18px 0 18px;
+        text-align: center;
+    }
+
+
+    /* Divider line – same as main header */
+    #alibraDashboard .sectionHeader::after {
+        content: "";
+        display: block;
+        width: 140px;
+        height: 1px;
+        margin-top: 8px;
+        background: linear-gradient(90deg,
+                transparent,
+                var(--divider),
+                transparent);
+    }
+
+    /* Make section headers match main header typography */
+    #alibraDashboard .sectionTitle {
+        font-size: 22px;
+        font-weight: 500;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: #D5A62B;
+        opacity: 1;
+    }
+
+
+    /* =========================
+   FORWARD CURVE AMBER CARDS
+   ========================= */
+
+    #alibraDashboard .forwardCurve {
+        background: linear-gradient(180deg,
+                rgba(250, 204, 21, 0.16) 0%,
+                rgba(15, 26, 46, 0.95) 65%);
+        border-color: rgba(250, 204, 21, 0.45);
+    }
+
+    #alibraDashboard .forwardCurve .title {
+        color: #fde68a;
+    }
+
+    /* =========================
+   FORWARD CURVE AMBER PILLS
+   ========================= */
+
+    #alibraDashboard .forwardCurve .pill {
+        border-color: rgba(250, 204, 21, 0.40);
+        background: rgba(250, 204, 21, 0.08);
+    }
+
+    #alibraDashboard .forwardCurve .pill .k {
+        color: #fde68a;
+        /* warm label */
+        opacity: 0.95;
+    }
+
+    #alibraDashboard .forwardCurve .pill .v {
+        color: #fff7d6;
+        /* readable value */
+    }
+
+    #alibraDashboard .forwardCurve .v.neu {
+        color: #fde68a;
+    }
+
+
+    /* =========================
+   FIX WP THICK WHITE TABLE GRID
+   ========================= */
+
+    /* 1) Nuke theme borders on our dashboard tables */
+    #alibraDashboard .tceTable,
+    #alibraDashboard .tceTable th,
+    #alibraDashboard .tceTable td {
+        border: 0 !important;
+    }
+
+    /* 2) Re-apply your intended thin horizontal rules */
+    #alibraDashboard .tceTable th,
+    #alibraDashboard .tceTable td {
+        border-bottom: 1px solid var(--border) !important;
+    }
+
+    /* 3) Keep only the vertical separators you actually want */
+    #alibraDashboard .tceTable th:first-child,
+    #alibraDashboard .tceTable td:first-child {
+        border-right: 1px solid var(--divider) !important;
+    }
+
+    #alibraDashboard .periodSeparator {
+        border-right: 1px solid var(--divider) !important;
+    }
+
+    /* 4) Keep the outer frame (tableWrap) subtle */
+    #alibraDashboard .tableWrap {
+        border: 1px solid var(--border) !important;
+    }
+
+    /* Re-assert marker colours (beats #alibraDashboard .tceTable td colour) */
+    #alibraDashboard .tceTable td.markerCol.markerUp {
+        color: var(--pos) !important;
+    }
+
+    #alibraDashboard .tceTable td.markerCol.markerDown {
+        color: var(--neg) !important;
+    }
+
+    #alibraDashboard .tceTable td.markerCol.markerFlat {
+        color: #facc15 !important;
+    }
+
+    /* Re-assert period dividers AFTER any border resets */
+    #alibraDashboard .tceTable .periodSeparator {
+        border-right: 1px solid var(--divider) !important;
+    }
+
+    #alibraDashboard .dryBulk .tceTable .periodSeparator {
+        border-right-color: rgba(74, 222, 128, 0.45) !important;
+    }
+
+    #alibraDashboard .tanker .tceTable .periodSeparator {
+        border-right-color: rgba(96, 165, 250, 0.55) !important;
+    }
+
+    /* =========================
+   DASHBOARD FONT OVERRIDE
+   ========================= */
+
+    #alibraDashboard {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+            Roboto, Inter, Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        letter-spacing: 0;
+    }
+
+    /* Tables: slightly tighter */
+    #alibraDashboard table {
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    /* Headers: less shouty than WP theme */
+    #alibraDashboard h1,
+    #alibraDashboard h2,
+    #alibraDashboard h3 {
+        font-weight: 600;
+        letter-spacing: 0.02em;
+    }
+
+    /* Table headers specifically */
+    #alibraDashboard th {
+        font-weight: 600;
+    }
+
+    /* Numbers: keep crisp */
+    #alibraDashboard td {
+        font-variant-numeric: tabular-nums;
+    }
+</style>
+
+
+
+<div id="alibraDashboard">
+
+    <header>
+        <div>
+            <h1>ALIBRA SHIPPING WEEKLY TIME CHARTER RATES</h1>
+        </div>
+        <div class="sub" id="lastUpdated"></div>
+    </header>
+
+    <div id="tceTables" class="tablesGrid" style="margin-bottom:14px;"></div>
+
+    <div id="dryBulkTrends" class="tablesGrid" style="margin-bottom:14px;"></div>
+
+    <div id="tankerTables" class="tablesGrid" style="margin-bottom:14px;"></div>
+
+    <div id="tankerTrends" class="tablesGrid" style="margin-bottom:14px;"></div>
+
+    <section class="sectionHeader">
+        <h2 class="sectionTitle">
+            FORWARD CURVES: SHIP TYPES (USD/DAY)
+        </h2>
+        <div class="sub">Tenors are 3 months apart.</div>
+    </section>
+
+    <div id="charts" class="grid"></div>
+
+    <div id="status" class="status">Loading…</div>
+
+    <script>
+        // URL Constants
+        const TABLE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQk6073LStJEfzv418WKYluN2zykXon3KL58hPVNnqoOPiZVhBVzBCi9QnnAETwm_QbMvltcNCuzTzH/pub?gid=1944138367&single=true&output=csv";
+        const FORWARD_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkGGniHOjjs_0booelgLP3pGwySZLvMLskYlJCxNLcq6uf9EaH50Wcpob87lH7xw/pub?gid=1196769730&single=true&output=csv";
+        const TREND_ATL_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=409746990&single=true&output=csv";
+        const TREND_PAC_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=779118968&single=true&output=csv";
+        const LAST_UPDATED_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQk6073LStJEfzv418WKYluN2zykXon3KL58hPVNnqoOPiZVhBVzBCi9QnnAETwm_QbMvltcNCuzTzH/pub?gid=92942855&single=true&output=csv";
+
+        // Tanker Tables (Weekly TCE snapshot)
+        const TANKER_TABLE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQk6073LStJEfzv418WKYluN2zykXon3KL58hPVNnqoOPiZVhBVzBCi9QnnAETwm_QbMvltcNCuzTzH/pub?gid=1458966001&single=true&output=csv";
+
+        // Tanker Trend Charts (Annual)
+        const TANKER_TREND_1Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=137918187&single=true&output=csv";
+        const TANKER_TREND_3Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=1501135879&single=true&output=csv";
+
+        const statusEl = document.getElementById("status");
+        const chartsEl = document.getElementById("charts");
+        const lastUpdatedEl = document.getElementById("lastUpdated");
+        const dryBulkTrendsEl = document.getElementById("dryBulkTrends");
+        const tankerTrendsEl = document.getElementById("tankerTrends");
+
+        const tanker1YRateMap = {};
+            const tankerTrendColorMap = {};
+
+            function normaliseTankerTypeKey(value) {
+                const key = String(value || "").trim().toUpperCase();
+                const aliases = {
+                    "AFRA": "AFRAMAX",
+                    "MR": "MR IMO3",
+                    "SUEZ": "SUEZMAX"
+                };
+                return aliases[key] || key;
+            }
+
+            const TANKER_SERIES_COLOR_MAP = {
+                "HANDYMAX": "#4E79A7",
+                "MR IMO3": "#E15759",
+                "LR1": "#76B7B2",
+                "LR2": "#59A14F",
+                "AFRAMAX": "#EDC948",
+                "SUEZMAX": "#B07AA1",
+                "VLCC": "#fb923c"
+            };
+
+            const FORWARD_TO_TANKER_TYPE = {
+                "VLCC TD3C 270,000 NHC AG/CHINA TCE": "VLCC",
+                "VLCC ECO TD3C ECO - 270,000 NHC AG/CHINA TCE": "VLCC",
+                "SUEZMAX TD20 130,000 NHC WAFR/UKC TCE": "SUEZMAX",
+                "AFRAMAX TD25 70,000 NHC USG/UKC TCE": "AFRAMAX",
+                "LR1 TC5 - 55,000 CPP AG/JAPAN TCE": "LR1",
+                "LR1 ECO TC5 - 55,000 CPP AG/JAPAN TCE": "LR1",
+                "MR - TC2 37,000 CPP UKC/USAC TCE": "MR IMO3",
+                "MR ECO TC2 37,000 CPP UKC/USAC TCE": "MR IMO3",
+                "MR - TC14 - 38,000 CPP USG/UKC TCE": "MR IMO3",
+                "MR ECO - TC14 38,000 CPP USG/UKC TCE": "MR IMO3",
+                "MR TRIANGULATION TCE CPP TC2+TC14": "MR IMO3",
+                "MR TC6 38,000 CPP WMED/MED TCE": "MR IMO3"
+            };
+
+            function getMappedTankerType(forwardTitle) {
+                const mapped = FORWARD_TO_TANKER_TYPE[String(forwardTitle || "").trim()] || null;
+                return mapped ? normaliseTankerTypeKey(mapped) : null;
+            }
+
+        // Distinct, non-orange palette for tanker series
+        const DISTINCT_PALETTE = [
+            "#4E79A7", // blue
+            "#E15759", // red
+            "#76B7B2", // teal
+            "#59A14F", // green
+            "#EDC948", // yellow
+            "#B07AA1", // purple
+            "#9C755F", // brown
+            "#FF9DA7", // pink
+            "#BAB0AC"  // grey
+        ];
+
+        // Build a per-chart colour map so no series repeats a colour
+        function buildSeriesColorMap(keys) {
+            const map = {};
+            const used = new Set();
+
+            // 1) Hard rules first
+            keys.forEach(k => {
+                const tankerColor = TANKER_SERIES_COLOR_MAP[normaliseTankerTypeKey(k)];
+                if (tankerColor) {
+                    map[k] = tankerColor;
+                    used.add(map[k]);
+                }
+            });
+
+            // 2) Assign remaining series unique colours from the palette
+            let i = 0;
+            keys.forEach(k => {
+                if (map[k]) return;
+                while (i < DISTINCT_PALETTE.length && used.has(DISTINCT_PALETTE[i])) i++;
+                const c = DISTINCT_PALETTE[i % DISTINCT_PALETTE.length];
+                map[k] = c;
+                used.add(c);
+                i++;
+            });
+
+            return map;
+        }
+
+
+        function setStatus(msg, isError = false) {
+            statusEl.textContent = msg;
+            statusEl.className = "status" + (isError ? " error" : "");
+        }
+
+        function clearChartHost(host) {
+            if (!host) return;
+            host.querySelectorAll("canvas").forEach(canvas => {
+                const chart = Chart.getChart(canvas);
+                if (chart) chart.destroy();
+            });
+            host.innerHTML = "";
+        }
+
+        function getCss(varName) {
+            const root = document.getElementById("alibraDashboard");
+            return getComputedStyle(root).getPropertyValue(varName).trim();
+        }
+
+
+        function fmtUSD(n) {
+            if (n === null || n === undefined) return "—";
+            return new Intl.NumberFormat("en-GB", { maximumFractionDigits: 0 }).format(n);
+        }
+
+        function fmtGBPishNumber(n) {
+            if (n === null || n === undefined) return "—";
+            return new Intl.NumberFormat("en-GB", { maximumFractionDigits: 0 }).format(n);
+        }
+
+        function fmtCompactNumber(n) {
+            if (n === null || n === undefined) return "—";
+            return new Intl.NumberFormat("en-GB", {
+                notation: "compact",
+                compactDisplay: "short",
+                maximumFractionDigits: 0
+            }).format(n);
+        }
+
+        function fmtMonthYearLabel(label) {
+            const s = String(label ?? "").trim();
+            const m = s.match(/^\d{1,2}\s+([A-Za-z]{3}\s+\d{4})$/);
+            return m ? m[1] : s;
+        }
+
+        function fmtSignedUSD(n) {
+            if (n === null || n === undefined) return "—";
+            const sign = n > 0 ? "+" : (n < 0 ? "−" : "");
+            return sign + fmtUSD(Math.abs(n));
+        }
+
+        function parseMoneyCell(x) {
+            const s = String(x ?? "").trim().replace(/^"+|"+$/g, "").replace(/,/g, "");
+            if (!s) return null;
+            const n = Number(s);
+            return Number.isFinite(n) ? n : null;
+        }
+
+        function parsePctCell(x) {
+            const s = String(x ?? "").trim().replace(/^"+|"+$/g, "");
+            if (!s) return null;
+            const n = Number(s);
+            return Number.isFinite(n) ? n : null;
+        }
+
+        function toNumber(x) {
+            const s = String(x ?? "").trim().replace(/^"+|"+$/g, "").replace(/,/g, "");
+            if (!s) return null;
+            const n = Number(s);
+            return Number.isFinite(n) ? n : null;
+        }
+
+        // Helper to generate marker/arrow cells
+        function markerCell(change) {
+            const td = document.createElement("td");
+            td.className = "markerCol";
+
+            if (change === null || change === undefined) {
+                td.textContent = "";
+                return td;
+            }
+
+            if (change > 0) {
+                td.textContent = "▲";
+                td.classList.add("markerUp");
+                return td;
+            }
+
+            if (change < 0) {
+                td.textContent = "▼";
+                td.classList.add("markerDown");
+                return td;
+            }
+
+            // change === 0 → no change
+            td.textContent = "—";
+            td.classList.add("markerFlat");
+            return td;
+        }
+
+
+        function finite(arr) { return arr.filter(v => typeof v === "number" && Number.isFinite(v)); }
+        function firstFinite(arr) {
+            for (const v of arr) if (typeof v === "number" && Number.isFinite(v)) return v;
+            return null;
+        }
+        function lastFinite(arr) {
+            for (let i = arr.length - 1; i >= 0; i--) {
+                const v = arr[i];
+                if (typeof v === "number" && Number.isFinite(v)) return v;
+            }
+            return null;
+        }
+        function lastStepDelta(arr) {
+            let last = null;
+            for (let i = arr.length - 1; i >= 0; i--) {
+                const v = arr[i];
+                if (typeof v === "number" && Number.isFinite(v)) {
+                    if (last === null) last = v;
+                    else return last - v;
+                }
+            }
+            return null;
+        }
+        function minMax(arr) {
+            const xs = finite(arr);
+            if (!xs.length) return { min: null, max: null };
+            let min = xs[0], max = xs[0];
+            for (const v of xs) { if (v < min) min = v; if (v > max) max = v; }
+            return { min, max };
+        }
+        function avgSlopePerStep(arr) {
+            const xs = finite(arr);
+            if (xs.length < 2) return null;
+            return (xs[xs.length - 1] - xs[0]) / (xs.length - 1);
+        }
+        function cls(n) {
+            if (n === null || n === undefined) return "neu";
+            if (n > 0) return "pos";
+            if (n < 0) return "neg";
+            return "neu";
+        }
+
+        function pill(key, value, colorClass = "neu") {
+            const p = document.createElement("div");
+            p.className = "pill";
+            const k = document.createElement("div");
+            k.className = "k";
+            k.textContent = key;
+            const v = document.createElement("div");
+            v.className = "v " + colorClass;
+            v.textContent = value;
+            p.appendChild(k);
+            p.appendChild(v);
+            return p;
+        }
+
+        // --- RENDER TABLES ---
+
+        // --- RENDER DRY BULK TABLES (SPLIT ATL/PAC) ---
+        function renderTwoTables(tableRows) {
+            const host = document.getElementById("tceTables");
+            if (!host) return;
+            host.innerHTML = "";
+
+            tableRows.sort((a, b) => (a.SORT ?? 999) - (b.SORT ?? 999));
+
+            const sizes = tableRows.map(r => r.Size);
+
+            const periods = [
+                { label: "4-6 Months", val: "6Months", chg: "6Mchange" },
+                { label: "1 Year", val: "1Year", chg: "1YRchange" },
+                { label: "2 Year", val: "2Year", chg: "2YRchange" },
+            ];
+
+            function makeOceanTableCard(title, ocean, mode) {
+                // mode: "rate" | "pct"
+                const card = document.createElement("div");
+                card.className = "tableCard dryBulk";
+
+                const h = document.createElement("h3");
+                h.className = "tableTitle";
+                const oceanLabel = (ocean === "ATL") ? "ATLANTIC" : "PACIFIC";
+                const parts = title.split(oceanLabel);
+                h.append(parts[0] || "");
+                const oceanSpan = document.createElement("span");
+                oceanSpan.className = "oceanWord " + (ocean === "ATL" ? "atl" : "pac");
+                oceanSpan.textContent = oceanLabel;
+                h.appendChild(oceanSpan);
+                h.append(parts[1] || "");
+                card.appendChild(h);
+
+                const wrap = document.createElement("div");
+                wrap.className = "tableWrap";
+
+                const table = document.createElement("table");
+                table.className = "tceTable";
+
+                const thead = document.createElement("thead");
+
+                const r1 = document.createElement("tr");
+                r1.appendChild(Object.assign(document.createElement("th"), { className: "periodSeparator", textContent: "PERIOD" }));
+                periods.forEach((p, idx) => {
+                    const th = document.createElement("th");
+                    th.colSpan = 2;
+                    th.className = "periodHeader" + (idx < periods.length - 1 ? " periodSeparator" : "");
+                    th.textContent = p.label;
+                    r1.appendChild(th);
+                });
+                thead.appendChild(r1);
+
+                const r2 = document.createElement("tr");
+                r2.appendChild(Object.assign(document.createElement("th"), { className: "periodSeparator", textContent: "SIZE" }));
+                periods.forEach((p, idx) => {
+                    const th = document.createElement("th");
+                    th.colSpan = 2;
+                    th.style.textAlign = "left";
+                    th.style.paddingLeft = "8px";
+                    th.textContent = (mode === "rate") ? "Rate" : "% Change";
+                    if (idx < periods.length - 1) th.classList.add("periodSeparator");
+                    r2.appendChild(th);
+                });
+                thead.appendChild(r2);
+
+                table.appendChild(thead);
+
+                const tbody = document.createElement("tbody");
+
+                sizes.forEach((size, idx) => {
+                    const row = tableRows[idx];
+                    const tr = document.createElement("tr");
+                    tr.appendChild(Object.assign(document.createElement("td"), { textContent: size }));
+
+                    periods.forEach((p, i) => {
+                        const valKey = p.val + ocean; // e.g. 1YearATL
+                        const chgKey = p.chg + ocean; // e.g. 1YRchangeATL
+                        const chg = parsePctCell(row[chgKey]);
+
+                        tr.appendChild(markerCell(chg));
+
+                        const td = document.createElement("td");
+                        if (mode === "rate") {
+                            const v = parseMoneyCell(row[valKey]);
+                            td.textContent = v === null ? "—" : `$${fmtGBPishNumber(v)}`;
+                        } else {
+                            td.textContent = (chg === null) ? "—" : `${chg}%`;
+                        }
+
+                        if (i < periods.length - 1) td.classList.add("periodSeparator");
+                        tr.appendChild(td);
+                    });
+
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                wrap.appendChild(table);
+                card.appendChild(wrap);
+
+
+
+                return card;
+            }
+
+            // Rates
+            host.appendChild(makeOceanTableCard("DRY BULK TIME CHARTER ESTIMATES: ATLANTIC (USD/DAY PRO RATA)", "ATL", "rate"));
+            host.appendChild(makeOceanTableCard("DRY BULK TIME CHARTER ESTIMATES: PACIFIC (USD/DAY PRO RATA)", "PAC", "rate"));
+
+            // % Change
+            host.appendChild(makeOceanTableCard("DRY BULK TIME CHARTER ESTIMATES: ATLANTIC (% CHANGE FROM PREVIOUS WEEK)", "ATL", "pct"));
+            host.appendChild(makeOceanTableCard("DRY BULK TIME CHARTER ESTIMATES: PACIFIC (% CHANGE FROM PREVIOUS WEEK)", "PAC", "pct"));
+        }
+
+
+        // --- RENDER TANKER TABLES (NEW) ---
+        function renderTankerTables(tableRows) {
+            const host = document.getElementById("tankerTables");
+            if (!host) return;
+            host.innerHTML = "";
+
+            tableRows.sort((a, b) => (a.SORT ?? 999) - (b.SORT ?? 999));
+
+            Object.keys(tanker1YRateMap).forEach(key => delete tanker1YRateMap[key]);
+            tableRows.forEach(row => {
+                const sizeKey = String(row.Size ?? row.SIZE ?? row.size ?? "").trim();
+                const oneYearVal =
+                    parseMoneyCell(row["1Year"]) ??
+                    parseMoneyCell(row["1YR"]) ??
+                    parseMoneyCell(row["1 Year"]) ??
+                    null;
+
+                const tankerKey = normaliseTankerTypeKey(sizeKey);
+                if (tankerKey && oneYearVal !== null) {
+                    tanker1YRateMap[tankerKey] = oneYearVal;
+                }
+            });
+
+            // Detect year periods from headers (e.g. 1Year, 3Year, 5Year, 1YR, 3YR, 5YR)
+            const sample = tableRows[0] || {};
+            const keys = Object.keys(sample);
+
+            function normaliseKey(k) { return String(k || "").toLowerCase().replace(/\s+/g, ""); }
+            function extractYearNum(k) {
+                const s = normaliseKey(k);
+                // match 1year / 1yr / year1
+                let m = s.match(/^(\d+)(year|yr)$/);
+                if (m) return Number(m[1]);
+                m = s.match(/^(\d+)(year|yr)/);
+                if (m) return Number(m[1]);
+                m = s.match(/(year|yr)(\d+)/);
+                if (m) return Number(m[2]);
+                return null;
+            }
+            function isChangeKey(k) {
+                const s = normaliseKey(k);
+                return s.includes("change") || s.includes("%") || s.includes("pct");
+            }
+
+            // Value keys: year keys that are NOT change keys
+            const yearValueKeys = keys
+                .map(k => ({ k, yr: extractYearNum(k), isChg: isChangeKey(k) }))
+                .filter(o => o.yr !== null && !o.isChg)
+                .sort((a, b) => a.yr - b.yr);
+
+            // For each year, find a matching change key
+            const periods = yearValueKeys.map(o => {
+                const yr = o.yr;
+                const base = String(yr);
+                const chg = keys.find(k => {
+                    const s = normaliseKey(k);
+                    return isChangeKey(k) && (s.includes(base + "year") || s.includes(base + "yr") || s.includes("year" + base) || s.includes("yr" + base));
+                }) || null;
+
+                return { yr, label: yr + " Year" + ((yr === 3 || yr === 5) ? "*" : ""), valKey: o.k, chgKey: chg };
+            });
+
+            function makeTableCard(title, makeBodyFn) {
+                const card = document.createElement("div");
+                card.className = "tableCard tanker";
+
+                const h = document.createElement("h3");
+                h.className = "tableTitle";
+                h.textContent = title;
+                card.appendChild(h);
+
+
+                const wrap = document.createElement("div");
+                wrap.className = "tableWrap";
+
+                const table = document.createElement("table");
+                table.className = "tceTable";
+
+                const thead = document.createElement("thead");
+
+                const r1 = document.createElement("tr");
+                r1.appendChild(Object.assign(document.createElement("th"), { className: "periodSeparator", textContent: "PERIOD" }));
+                periods.forEach((p, idx) => {
+                    const th = document.createElement("th");
+                    th.colSpan = 2;
+                    th.className = "periodHeader" + (idx < periods.length - 1 ? " periodSeparator" : "");
+                    th.textContent = p.label;
+                    r1.appendChild(th);
+                });
+                thead.appendChild(r1);
+
+                const r2 = document.createElement("tr");
+                r2.appendChild(Object.assign(document.createElement("th"), { className: "periodSeparator", textContent: "SIZE" }));
+                periods.forEach((p, idx) => {
+                    const th = document.createElement("th");
+                    th.colSpan = 2;
+                    th.style.textAlign = "left";
+                    th.style.paddingLeft = "8px";
+                    th.textContent = "Rate";
+                    if (idx < periods.length - 1) th.classList.add("periodSeparator");
+                    r2.appendChild(th);
+                });
+                thead.appendChild(r2);
+
+                table.appendChild(thead);
+
+                const tbody = document.createElement("tbody");
+                tableRows.forEach(row => {
+                    const tr = document.createElement("tr");
+                    tr.appendChild(Object.assign(document.createElement("td"), { textContent: row.Size ?? row.SIZE ?? row.size ?? "" }));
+
+                    const cells = makeBodyFn(row);
+                    cells.forEach(td => tr.appendChild(td));
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                wrap.appendChild(table);
+                card.appendChild(wrap);
+
+                const foot = document.createElement("p");
+                foot.className = "tableFootnote";
+                foot.textContent = "* Eco tonnage with Scrubber fitted.";
+                card.appendChild(foot);
+
+                return card;
+            }
+
+            const table1 = makeTableCard("TANKER TIME CHARTER ESTIMATES (USD/DAY PRO RATA)", (row) => {
+                const tds = [];
+                periods.forEach((p, i) => {
+                    const val = parseMoneyCell(row[p.valKey]);
+                    const chg = p.chgKey ? parsePctCell(row[p.chgKey]) : null;
+
+                    tds.push(markerCell(chg));
+
+                    const td = document.createElement("td");
+                    td.textContent = val === null ? "—" : `$${fmtGBPishNumber(val)}`;
+                    if (i < periods.length - 1) td.classList.add("periodSeparator");
+                    tds.push(td);
+                });
+                return tds;
+            });
+
+            const table2 = makeTableCard("TANKER TIME CHARTER ESTIMATES (% CHANGE FROM PREVIOUS WEEK)", (row) => {
+                const tds = [];
+                periods.forEach((p, i) => {
+                    const pct = p.chgKey ? parsePctCell(row[p.chgKey]) : null;
+
+                    tds.push(markerCell(pct));
+
+                    const td = document.createElement("td");
+                    td.textContent = (pct === null) ? "—" : `${pct}%`;
+                    if (i < periods.length - 1) td.classList.add("periodSeparator");
+                    tds.push(td);
+                });
+                return tds;
+            });
+
+            host.appendChild(table1);
+            host.appendChild(table2);
+        }
+
+
+        // --- RENDER TREND CHARTS (NEW) ---
+
+        async function renderDryBulkTrendCharts() {
+            clearChartHost(dryBulkTrendsEl);
+
+            const [atlRes, pacRes] = await Promise.all([
+                fetch(TREND_ATL_URL, { cache: "no-store" }),
+                fetch(TREND_PAC_URL, { cache: "no-store" })
+            ]);
+
+            if (!atlRes.ok) throw new Error("Failed to load Atlantic Trend CSV");
+            if (!pacRes.ok) throw new Error("Failed to load Pacific Trend CSV");
+
+            const atlText = await atlRes.text();
+            const pacText = await pacRes.text();
+
+            const atlData = Papa.parse(atlText, { header: true, skipEmptyLines: true }).data;
+            const pacData = Papa.parse(pacText, { header: true, skipEmptyLines: true }).data;
+
+            function setOceanTitle(el, title, oceanLabel) {
+                const parts = title.split(oceanLabel);
+                el.append(parts[0] || "");
+                const oceanSpan = document.createElement("span");
+                oceanSpan.className = "oceanWord " + (oceanLabel === "ATLANTIC" ? "atl" : "pac");
+                oceanSpan.textContent = oceanLabel;
+                el.appendChild(oceanSpan);
+                el.append(parts[1] || "");
+            }
+
+            function createTrendCard(title, dataRows, oceanLabel, maxXTicks = 9) {
+                const card = document.createElement("div");
+                card.className = "card dryBulkChart";
+
+                const titleRow = document.createElement("div");
+                titleRow.className = "titleRow";
+                const h = document.createElement("div");
+                h.className = "title";
+                setOceanTitle(h, title, oceanLabel);
+                titleRow.appendChild(h);
+                card.appendChild(titleRow);
+
+                const canvas = document.createElement("canvas");
+                card.appendChild(canvas);
+                dryBulkTrendsEl.appendChild(card);
+
+                if (!dataRows || !dataRows.length) return;
+
+                const keys = Object.keys(dataRows[0]);
+                const dateKey = keys[0];
+                const shipKeys = keys.slice(1);
+
+                const labels = dataRows.map(r => r[dateKey]);
+
+                const colorMap = buildSeriesColorMap(shipKeys);
+
+                const datasets = shipKeys.map((key, i) => ({
+                    // 1. ADD SPACES HERE for the gap between circle and text
+                    label: "  " + key + "  ",
+                    data: dataRows.map(r => toNumber(r[key])),
+                    borderColor: colorMap[key],
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    tension: 0.1,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    pointHitRadius: 10
+                }));
+
+                new Chart(canvas, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                labels: {
+                                    color: getCss("--muted"),
+                                    font: { size: 11 },
+                                    /* 1. Ensure this is false to use the rectangular box style */
+                                    usePointStyle: false,
+                                    /* 2. Set boxWidth and boxHeight to the same value for solid squares */
+                                    boxWidth: 8,
+                                    boxHeight: 8,
+                                    /* 3. Padding adds space between the legend items */
+                                    padding: 20
+                                }
+                            },
+                            tooltip: {
+                                enabled: true,
+                                padding: 12,
+                                titleFont: { size: 13 },
+                                bodyFont: { size: 13 },
+                                usePointStyle: false, // Keeps the indicator as a box
+                                callbacks: {
+                                    label: (ctx) => ` ${ctx.dataset.label.trim()}: $${fmtUSD(ctx.parsed.y)}`,
+
+                                    // Set the box to a solid color matching the line
+                                    labelColor: function (context) {
+                                        return {
+                                            // Sets the border to the line color
+                                            borderColor: context.dataset.borderColor,
+                                            // Sets the fill to the same color as the line
+                                            backgroundColor: context.dataset.borderColor,
+                                            borderWidth: 1,
+                                            borderRadius: 2
+                                        };
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: getCss("--grid") },
+                                ticks: {
+                                    maxTicksLimit: maxXTicks,
+                                    maxRotation: 0,
+                                    callback: function (value) {
+                                        const label = this.getLabelForValue ? this.getLabelForValue(value) : value;
+                                        return fmtMonthYearLabel(label);
+                                    }
+                                }
+                            },
+                            y: {
+                                grid: { color: getCss("--grid") },
+                                ticks: { callback: (val) => "$" + fmtCompactNumber(val) },
+                                title: { display: true, text: "USD/day" }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createTrendCard("DRY BULK 1YR TC RATES: ATLANTIC ANNUAL TREND", atlData, "ATLANTIC");
+            createTrendCard("DRY BULK 1YR TC RATES: PACIFIC ANNUAL TREND", pacData, "PACIFIC", 9);
+        }
+
+        // --- RENDER TANKER TREND CHARTS (NEW) ---
+        async function renderTankerTrendCharts() {
+            clearChartHost(tankerTrendsEl);
+
+            const [oneRes, threeRes] = await Promise.all([
+                fetch(TANKER_TREND_1Y_URL, { cache: "no-store" }),
+                fetch(TANKER_TREND_3Y_URL, { cache: "no-store" })
+            ]);
+
+            if (!oneRes.ok) throw new Error("Failed to load Tanker 1Y Trend CSV");
+            if (!threeRes.ok) throw new Error("Failed to load Tanker 3Y Trend CSV");
+
+            const oneText = await oneRes.text();
+            const threeText = await threeRes.text();
+
+            const oneData = Papa.parse(oneText, { header: true, skipEmptyLines: true }).data;
+            const threeData = Papa.parse(threeText, { header: true, skipEmptyLines: true }).data;
+
+            Object.keys(tankerTrendColorMap).forEach(key => delete tankerTrendColorMap[key]);
+
+            function createTankerTrendCard(title, dataRows, maxXTicks = 9) {
+                const card = document.createElement("div");
+                card.className = "card tankerChart";
+
+                const titleRow = document.createElement("div");
+                titleRow.className = "titleRow";
+                const h = document.createElement("div");
+                h.className = "title";
+                h.textContent = title;
+                titleRow.appendChild(h);
+                card.appendChild(titleRow);
+
+                const canvas = document.createElement("canvas");
+                card.appendChild(canvas);
+                tankerTrendsEl.appendChild(card);
+
+                if (!dataRows || !dataRows.length) return;
+
+                const keys = Object.keys(dataRows[0]);
+                const dateKey = keys[0];
+                const shipKeys = keys.slice(1);
+                const colorMap = buildSeriesColorMap(shipKeys);
+
+                shipKeys.forEach(key => {
+                    const tankerKey = normaliseTankerTypeKey(key);
+                    if (!(tankerKey in tankerTrendColorMap)) {
+                        tankerTrendColorMap[tankerKey] = colorMap[key];
+                    }
+                });
+
+
+                const labels = dataRows.map(r => r[dateKey]);
+
+                const datasets = shipKeys.map((key, i) => ({
+                    label: "  " + key + "  ",
+                    data: dataRows.map(r => toNumber(r[key])),
+                    borderColor: colorMap[key],
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    tension: 0.1,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    pointHitRadius: 10
+                }));
+
+                new Chart(canvas, {
+                    type: 'line',
+                    data: { labels, datasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                labels: {
+                                    color: getCss("--muted"),
+                                    font: { size: 11 },
+                                    usePointStyle: false,
+                                    boxWidth: 8,
+                                    boxHeight: 8,
+                                    padding: 20
+                                }
+                            },
+                            tooltip: {
+                                enabled: true,
+                                padding: 12,
+                                titleFont: { size: 13 },
+                                bodyFont: { size: 13 },
+                                usePointStyle: false,
+                                callbacks: {
+                                    label: (ctx) => ` ${ctx.dataset.label.trim()}: $${fmtUSD(ctx.parsed.y)}`,
+                                    labelColor: (context) => ({
+                                        borderColor: context.dataset.borderColor,
+                                        backgroundColor: context.dataset.borderColor,
+                                        borderWidth: 1,
+                                        borderRadius: 2
+                                    })
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: getCss("--grid") },
+                                ticks: {
+                                    maxTicksLimit: maxXTicks,
+                                    maxRotation: 0,
+                                    callback: function (value) {
+                                        const label = this.getLabelForValue ? this.getLabelForValue(value) : value;
+                                        return fmtMonthYearLabel(label);
+                                    }
+                                }
+                            },
+                            y: {
+                                grid: { color: getCss("--grid") },
+                                ticks: { callback: (val) => "$" + fmtCompactNumber(val) },
+                                title: { display: true, text: "USD/day" }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createTankerTrendCard("TANKER 1YR TC RATES ANNUAL TREND", oneData);
+            createTankerTrendCard("TANKER 3YR TC RATES ANNUAL TREND", threeData, 9);
+        }
+
+        async function loadLastUpdatedFromSheet() {
+            const res = await fetch(LAST_UPDATED_CSV_URL, { cache: "no-store" });
+            if (!res.ok) throw new Error("Last-updated CSV fetch failed");
+
+            const text = await res.text();
+
+            // Single-cell CSV: value will be in first row, first column
+            const parsed = Papa.parse(text, { skipEmptyLines: true });
+            const value = parsed?.data?.[0]?.[0];
+
+            return String(value ?? "").trim();
+        }
+
+
+
+
+        // --- MAIN INIT ---
+        async function init() {
+            try {
+                Chart.defaults.color = getCss("--muted");
+
+                // 1. Render Tables
+                const tRes = await fetch(TABLE_CSV_URL, { cache: "no-store" });
+                if (!tRes.ok) throw new Error(`Table CSV fetch failed`);
+                const tText = await tRes.text();
+                const tParsed = Papa.parse(tText, { header: true, skipEmptyLines: true });
+                const tRows = (tParsed.data || []).map(r => ({ ...r, SORT: Number(String(r.SORT ?? "").trim()) }));
+                renderTwoTables(tRows);
+
+                // 2. Render Dry Bulk Trend Charts
+                await renderDryBulkTrendCharts();
+
+                // 3. Render Tanker Tables
+                const tkRes = await fetch(TANKER_TABLE_CSV_URL, { cache: "no-store" });
+                if (!tkRes.ok) throw new Error(`Tanker Table CSV fetch failed`);
+                const tkText = await tkRes.text();
+                const tkParsed = Papa.parse(tkText, { header: true, skipEmptyLines: true });
+                const tkRows = (tkParsed.data || []).map(r => ({ ...r, SORT: Number(String(r.SORT ?? "").trim()) }));
+                renderTankerTables(tkRows);
+
+                // 4. Render Tanker Trend Charts
+                await renderTankerTrendCharts();
+
+                // 5. Render Forward Curves (Existing)
+                const res = await fetch(FORWARD_CSV_URL, { cache: "no-store" });
+                if (!res.ok) throw new Error(`Forward CSV fetch failed`);
+                const text = await res.text();
+                const parsed = Papa.parse(text, { skipEmptyLines: true });
+                const rows = parsed.data;
+                if (!rows || rows.length < 2) throw new Error("CSV has no data rows.");
+
+                clearChartHost(chartsEl);
+
+                const headers = rows[0];
+                const titles = headers.slice(1).map(t => String(t ?? "").trim()).filter(Boolean);
+                const dataRows = rows.slice(1);
+                const forwardRows = dataRows
+                    .map(r => ({
+                        tenor: String(r[0] ?? "").trim(),
+                        cells: r
+                    }))
+                    .filter(r => r.tenor);
+                const tenors = forwardRows.map(r => r.tenor);
+
+                titles.forEach((title, i) => {
+                    const values = forwardRows.map(r => toNumber(r.cells[i + 1]));
+                    const front = firstFinite(values);
+                    const back = lastFinite(values);
+                    const spread = (front !== null && back !== null) ? (back - front) : null;
+                    const tail = lastStepDelta(values);
+                    const avg = avgSlopePerStep(values);
+                    const mm = minMax(values);
+                    const rangeText = (mm.min !== null && mm.max !== null) ? `$${fmtUSD(mm.min)} to $${fmtUSD(mm.max)}` : "—";
+
+                    const card = document.createElement("div");
+                    card.className = "card forwardCurve";
+                    const titleRow = document.createElement("div");
+                    titleRow.className = "titleRow";
+                    const h = document.createElement("div");
+                    h.className = "title";
+                    h.textContent = title.trim();
+                    titleRow.appendChild(h);
+
+                    const meta = document.createElement("div");
+                    meta.className = "meta";
+                    meta.textContent = (spread === null) ? "" : (spread > 0 ? "Contango" : (spread < 0 ? "Backwardation" : "Flat"));
+                    titleRow.appendChild(meta);
+                    card.appendChild(titleRow);
+
+                    // const canvas = document.createElement("canvas");
+                    // card.appendChild(canvas);
+
+                    // start
+
+                    const canvas = document.createElement("canvas");
+                    const box = document.createElement("div");
+                    box.className = "fcChartBox";
+                    box.appendChild(canvas);
+
+                    card.appendChild(box);
+
+                    //end
+
+                    const metrics = document.createElement("div");
+                    metrics.className = "metrics";
+                    metrics.appendChild(pill("Front (near)", front !== null ? `$${fmtUSD(front)}` : "—", "neu"));
+                    metrics.appendChild(pill("Back (far)", back !== null ? `$${fmtUSD(back)}` : "—", "neu"));
+                    metrics.appendChild(pill("Back–Front", spread !== null ? `$${fmtSignedUSD(spread)}` : "—", cls(spread)));
+                    metrics.appendChild(pill("Avg slope / qtr", avg !== null ? `$${fmtSignedUSD(avg)}` : "—", cls(avg)));
+                    metrics.appendChild(pill("Tail slope / qtr", tail !== null ? `$${fmtSignedUSD(tail)}` : "—", cls(tail)));
+                    metrics.appendChild(pill("Range", rangeText, "neu"));
+                    card.appendChild(metrics);
+                    chartsEl.appendChild(card);
+
+                    const fcChart = new Chart(canvas, {
+                        type: "line",
+                        data: {
+                            labels: tenors,
+                            datasets: (() => {
+                                const ds = [{
+                                    label: title.trim(),
+                                    data: values,
+                                    borderColor: getCss("--accent"),
+                                    backgroundColor: getCss("--accentFill"),
+                                    borderWidth: 2,
+                                    tension: 0.25,
+                                    fill: true,
+                                    pointRadius: 3,
+                                    pointHoverRadius: 7,
+                                    pointHitRadius: 6
+                                }];
+
+                                const tankerType = getMappedTankerType(title);
+                                const tanker1Y = tankerType ? tanker1YRateMap[tankerType] : null;
+                                const tankerColor = tankerType ? tankerTrendColorMap[tankerType] : null;
+
+                                if (tankerType && tanker1Y !== null) {
+                                    ds.push({
+                                        label: `${tankerType} 1Y TC`,
+                                        data: tenors.map(() => tanker1Y),
+                                        borderColor: tankerColor || "#ffffff",
+                                        backgroundColor: "transparent",
+                                        borderWidth: 2,
+                                        borderDash: [6, 6],
+                                        tension: 0,
+                                        fill: false,
+                                        pointRadius: 0,
+                                        pointHoverRadius: 0,
+                                        pointHitRadius: 0
+                                    });
+                                }
+
+                                return ds;
+                            })()
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: { mode: "index", axis: "x", intersect: false },
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    labels: {
+                                        filter: function (item) {
+                                            return item.text && item.text.indexOf("1Y TC") !== -1;
+                                        },
+                                        color: getCss("--muted"),
+                                        font: { size: 11 },
+                                        usePointStyle: false,
+                                        boxWidth: 18,
+                                        boxHeight: 2,
+                                        padding: 12
+                                    }
+                                },
+                                tooltip: {
+                                    enabled: true,
+                                    padding: 16,
+                                    caretPadding: 12,
+                                    cornerRadius: 10,
+                                    boxPadding: 6,
+                                    bodySpacing: 6,
+                                    titleFont: { size: 14, weight: "600" },
+                                    bodyFont: { size: 14 },
+                                    displayColors: false,
+                                    callbacks: {
+                                        title: (items) => items?.[0]?.label ?? "",
+                                        label: (ctx) => ` $${fmtUSD(ctx.parsed.y)} / day`
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    grid: { color: getCss("--grid") },
+                                    ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }
+                                },
+                                y: {
+                                    grid: { color: getCss("--grid") },
+                                    ticks: { callback: (val) => "$" + fmtUSD(val) },
+                                    title: { display: true, text: "USD/day" }
+                                }
+                            }
+                        }
+                    });
+
+                    // iOS/WebKit: ensure Chart.js recalculates after final layout
+                    requestAnimationFrame(() => {
+                        fcChart.resize();
+                        requestAnimationFrame(() => fcChart.resize());
+                    });
+
+                });
+
+                // Finish status last, once all charts are created
+                await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+                setStatus(`Data loaded.`);
+                try {
+                    const sheetDate = await loadLastUpdatedFromSheet();
+                    lastUpdatedEl.textContent = sheetDate
+                        ? `Last updated: ${sheetDate}`
+                        : "Last updated: —";
+                } catch (err) {
+                    console.error("Last updated fetch failed", err);
+                    lastUpdatedEl.textContent = "Last updated: —";
+                }
+
+
+            } catch (err) {
+                console.error(err);
+                setStatus("Error: " + (err && err.message ? err.message : String(err)), true);
+            }
+        }
+
+        init();
+
+    </script>
+
+</div>
+
+
 </html>
