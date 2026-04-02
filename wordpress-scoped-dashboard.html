@@ -111,10 +111,6 @@
         background: linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
         color: var(--muted);
         font-size: 13px;
-        margin-bottom: 14px;
-    }
-
-    #alibraDashboard .status {
         margin-top: 20px;
         /* breathing space from charts */
         margin-bottom: 24px;
@@ -672,7 +668,8 @@
         <h2 class="sectionTitle">
             FORWARD CURVES: SHIP TYPES (USD/DAY)
         </h2>
-        <div class="sub">Tenors are 3 months apart.</div>
+        <div class="sub">Blue curve shows calculated forward TCE; dashed line shows Alibra TC benchmark. Arb metrics compare the curve to the
+        benchmark over spot, 6M, 12M and 24M horizons.</div>
     </section>
 
     <div id="charts" class="grid"></div>
@@ -682,7 +679,7 @@
     <script>
         // URL Constants
         const TABLE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQk6073LStJEfzv418WKYluN2zykXon3KL58hPVNnqoOPiZVhBVzBCi9QnnAETwm_QbMvltcNCuzTzH/pub?gid=1944138367&single=true&output=csv";
-        const FORWARD_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdqAGPK_OWDdd7rIBkTtSk2WG4k7Rgth9rTbkN9KR6U74OXO8kq-QOmiAVIo1ZtA/pub?gid=1196769730&single=true&output=csv";
+        const FORWARD_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkGGniHOjjs_0booelgLP3pGwySZLvMLskYlJCxNLcq6uf9EaH50Wcpob87lH7xw/pub?gid=1196769730&single=true&output=csv";
         const TREND_ATL_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=409746990&single=true&output=csv";
         const TREND_PAC_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=779118968&single=true&output=csv";
         const LAST_UPDATED_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQk6073LStJEfzv418WKYluN2zykXon3KL58hPVNnqoOPiZVhBVzBCi9QnnAETwm_QbMvltcNCuzTzH/pub?gid=92942855&single=true&output=csv";
@@ -692,13 +689,56 @@
 
         // Tanker Trend Charts (Annual)
         const TANKER_TREND_1Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=137918187&single=true&output=csv";
-        const TANKER_TREND_5Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=1501135879&single=true&output=csv";
+        const TANKER_TREND_3Y_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSm3hFo3WpdJQ86FaGIy-S151biJvr2J31-kbmYmO9kOwJ2sDjbz-v8ooNpsufCepZS0tCUavO5iUrI/pub?gid=1501135879&single=true&output=csv";
 
         const statusEl = document.getElementById("status");
         const chartsEl = document.getElementById("charts");
         const lastUpdatedEl = document.getElementById("lastUpdated");
         const dryBulkTrendsEl = document.getElementById("dryBulkTrends");
         const tankerTrendsEl = document.getElementById("tankerTrends");
+
+        const tanker1YRateMap = {};
+        const tankerTrendColorMap = {};
+
+        function normaliseTankerTypeKey(value) {
+            const key = String(value || "").trim().toUpperCase();
+            const aliases = {
+                "AFRA": "AFRAMAX",
+                "MR": "MR IMO3",
+                "SUEZ": "SUEZMAX"
+            };
+            return aliases[key] || key;
+        }
+
+        const TANKER_SERIES_COLOR_MAP = {
+            "HANDYMAX": "#4E79A7",
+            "MR IMO3": "#E15759",
+            "LR1": "#76B7B2",
+            "LR2": "#59A14F",
+            "AFRAMAX": "#EDC948",
+            "SUEZMAX": "#B07AA1",
+            "VLCC": "#fb923c"
+        };
+
+        const FORWARD_TO_TANKER_TYPE = {
+            "VLCC TD3C 270,000 NHC AG/CHINA TCE": "VLCC",
+            "VLCC ECO TD3C ECO - 270,000 NHC AG/CHINA TCE": "VLCC",
+            "SUEZMAX TD20 130,000 NHC WAFR/UKC TCE": "SUEZMAX",
+            "AFRAMAX TD25 70,000 NHC USG/UKC TCE": "AFRAMAX",
+            "LR1 TC5 - 55,000 CPP AG/JAPAN TCE": "LR1",
+            "LR1 ECO TC5 - 55,000 CPP AG/JAPAN TCE": "LR1",
+            "MR - TC2 37,000 CPP UKC/USAC TCE": "MR IMO3",
+            "MR ECO TC2 37,000 CPP UKC/USAC TCE": "MR IMO3",
+            "MR - TC14 - 38,000 CPP USG/UKC TCE": "MR IMO3",
+            "MR ECO - TC14 38,000 CPP USG/UKC TCE": "MR IMO3",
+            "MR TRIANGULATION TCE CPP TC2+TC14": "MR IMO3",
+            "MR TC6 38,000 CPP WMED/MED TCE": "MR IMO3"
+        };
+
+        function getMappedTankerType(forwardTitle) {
+            const mapped = FORWARD_TO_TANKER_TYPE[String(forwardTitle || "").trim()] || null;
+            return mapped ? normaliseTankerTypeKey(mapped) : null;
+        }
 
         // Distinct, non-orange palette for tanker series
         const DISTINCT_PALETTE = [
@@ -720,9 +760,9 @@
 
             // 1) Hard rules first
             keys.forEach(k => {
-                const name = String(k || "");
-                if (/^vlcc$/i.test(name)) {
-                    map[k] = "#fb923c"; // VLCC orange (stronger than palette orange)
+                const tankerColor = TANKER_SERIES_COLOR_MAP[normaliseTankerTypeKey(k)];
+                if (tankerColor) {
+                    map[k] = tankerColor;
                     used.add(map[k]);
                 }
             });
@@ -747,6 +787,15 @@
             statusEl.className = "status" + (isError ? " error" : "");
         }
 
+        function clearChartHost(host) {
+            if (!host) return;
+            host.querySelectorAll("canvas").forEach(canvas => {
+                const chart = Chart.getChart(canvas);
+                if (chart) chart.destroy();
+            });
+            host.innerHTML = "";
+        }
+
         function getCss(varName) {
             const root = document.getElementById("alibraDashboard");
             return getComputedStyle(root).getPropertyValue(varName).trim();
@@ -758,12 +807,7 @@
             return new Intl.NumberFormat("en-GB", { maximumFractionDigits: 0 }).format(n);
         }
 
-        function fmtGBPishNumber(n) {
-            if (n === null || n === undefined) return "—";
-            return new Intl.NumberFormat("en-GB", { maximumFractionDigits: 0 }).format(n);
-        }
-
-        function fmtGBPCompact(n) {
+        function fmtCompactNumber(n) {
             if (n === null || n === undefined) return "—";
             return new Intl.NumberFormat("en-GB", {
                 notation: "compact",
@@ -798,13 +842,6 @@
             return Number.isFinite(n) ? n : null;
         }
 
-        function toNumber(x) {
-            const s = String(x ?? "").trim().replace(/^"+|"+$/g, "").replace(/,/g, "");
-            if (!s) return null;
-            const n = Number(s);
-            return Number.isFinite(n) ? n : null;
-        }
-
         // Helper to generate marker/arrow cells
         function markerCell(change) {
             const td = document.createElement("td");
@@ -833,8 +870,34 @@
             return td;
         }
 
+    function avgFirstNFinite(arr, n) {
+        const vals = [];
+        for (const v of arr) {
+            if (typeof v === "number" && Number.isFinite(v)) {
+                vals.push(v);
+                if (vals.length === n) break;
+            }
+        }
+        if (!vals.length || vals.length < n) return null;
+        return vals.reduce((a, b) => a + b, 0) / vals.length;
+    }
 
-        function finite(arr) { return arr.filter(v => typeof v === "number" && Number.isFinite(v)); }
+    function lumpSumFromDaily(dayRateDiff, months) {
+        if (dayRateDiff === null || dayRateDiff === undefined) return null;
+        const days = months * 30.4375;
+        return dayRateDiff * days;
+    }
+
+    function fmtUSDm(n) {
+        if (n === null || n === undefined) return "—";
+        const abs = Math.abs(n);
+        const sign = n > 0 ? "+" : (n < 0 ? "−" : "");
+        if (abs >= 1000000) {
+            return `${sign}$${(abs / 1000000).toFixed(1)}m`;
+        }
+        return `${sign}$${fmtUSD(abs)}`;
+    }
+
         function firstFinite(arr) {
             for (const v of arr) if (typeof v === "number" && Number.isFinite(v)) return v;
             return null;
@@ -845,29 +908,6 @@
                 if (typeof v === "number" && Number.isFinite(v)) return v;
             }
             return null;
-        }
-        function lastStepDelta(arr) {
-            let last = null;
-            for (let i = arr.length - 1; i >= 0; i--) {
-                const v = arr[i];
-                if (typeof v === "number" && Number.isFinite(v)) {
-                    if (last === null) last = v;
-                    else return last - v;
-                }
-            }
-            return null;
-        }
-        function minMax(arr) {
-            const xs = finite(arr);
-            if (!xs.length) return { min: null, max: null };
-            let min = xs[0], max = xs[0];
-            for (const v of xs) { if (v < min) min = v; if (v > max) max = v; }
-            return { min, max };
-        }
-        function avgSlopePerStep(arr) {
-            const xs = finite(arr);
-            if (xs.length < 2) return null;
-            return (xs[xs.length - 1] - xs[0]) / (xs.length - 1);
         }
         function cls(n) {
             if (n === null || n === undefined) return "neu";
@@ -899,6 +939,7 @@
             host.innerHTML = "";
 
             tableRows.sort((a, b) => (a.SORT ?? 999) - (b.SORT ?? 999));
+
             const sizes = tableRows.map(r => r.Size);
 
             const periods = [
@@ -975,7 +1016,7 @@
                         const td = document.createElement("td");
                         if (mode === "rate") {
                             const v = parseMoneyCell(row[valKey]);
-                            td.textContent = v === null ? "—" : `$${fmtGBPishNumber(v)}`;
+                            td.textContent = v === null ? "—" : `$${fmtUSD(v)}`;
                         } else {
                             td.textContent = (chg === null) ? "—" : `${chg}%`;
                         }
@@ -1010,8 +1051,24 @@
         function renderTankerTables(tableRows) {
             const host = document.getElementById("tankerTables");
             if (!host) return;
+            host.innerHTML = "";
 
             tableRows.sort((a, b) => (a.SORT ?? 999) - (b.SORT ?? 999));
+
+            Object.keys(tanker1YRateMap).forEach(key => delete tanker1YRateMap[key]);
+            tableRows.forEach(row => {
+                const sizeKey = String(row.Size ?? row.SIZE ?? row.size ?? "").trim();
+                const oneYearVal =
+                    parseMoneyCell(row["1Year"]) ??
+                    parseMoneyCell(row["1YR"]) ??
+                    parseMoneyCell(row["1 Year"]) ??
+                    null;
+
+                const tankerKey = normaliseTankerTypeKey(sizeKey);
+                if (tankerKey && oneYearVal !== null) {
+                    tanker1YRateMap[tankerKey] = oneYearVal;
+                }
+            });
 
             // Detect year periods from headers (e.g. 1Year, 3Year, 5Year, 1YR, 3YR, 5YR)
             const sample = tableRows[0] || {};
@@ -1127,7 +1184,7 @@
                     tds.push(markerCell(chg));
 
                     const td = document.createElement("td");
-                    td.textContent = val === null ? "—" : `$${fmtGBPishNumber(val)}`;
+                    td.textContent = val === null ? "—" : `$${fmtUSD(val)}`;
                     if (i < periods.length - 1) td.classList.add("periodSeparator");
                     tds.push(td);
                 });
@@ -1157,9 +1214,11 @@
         // --- RENDER TREND CHARTS (NEW) ---
 
         async function renderDryBulkTrendCharts() {
+            clearChartHost(dryBulkTrendsEl);
+
             const [atlRes, pacRes] = await Promise.all([
-                fetch(TREND_ATL_URL),
-                fetch(TREND_PAC_URL)
+                fetch(TREND_ATL_URL, { cache: "no-store" }),
+                fetch(TREND_PAC_URL, { cache: "no-store" })
             ]);
 
             if (!atlRes.ok) throw new Error("Failed to load Atlantic Trend CSV");
@@ -1197,6 +1256,8 @@
                 card.appendChild(canvas);
                 dryBulkTrendsEl.appendChild(card);
 
+                if (!dataRows || !dataRows.length) return;
+
                 const keys = Object.keys(dataRows[0]);
                 const dateKey = keys[0];
                 const shipKeys = keys.slice(1);
@@ -1205,11 +1266,10 @@
 
                 const colorMap = buildSeriesColorMap(shipKeys);
 
-
                 const datasets = shipKeys.map((key, i) => ({
                     // 1. ADD SPACES HERE for the gap between circle and text
                     label: "  " + key + "  ",
-                    data: dataRows.map(r => toNumber(r[key])),
+                    data: dataRows.map(r => parseMoneyCell(r[key])),
                     borderColor: colorMap[key],
                     backgroundColor: 'transparent',
                     borderWidth: 2,
@@ -1284,7 +1344,7 @@
                             },
                             y: {
                                 grid: { color: getCss("--grid") },
-                                ticks: { callback: (val) => "£" + fmtGBPCompact(val) },
+                                ticks: { callback: (val) => "$" + fmtCompactNumber(val) },
                                 title: { display: true, text: "USD/day" }
                             }
                         }
@@ -1298,19 +1358,23 @@
 
         // --- RENDER TANKER TREND CHARTS (NEW) ---
         async function renderTankerTrendCharts() {
-            const [oneRes, fiveRes] = await Promise.all([
-                fetch(TANKER_TREND_1Y_URL),
-                fetch(TANKER_TREND_5Y_URL)
+            clearChartHost(tankerTrendsEl);
+
+            const [oneRes, threeRes] = await Promise.all([
+                fetch(TANKER_TREND_1Y_URL, { cache: "no-store" }),
+                fetch(TANKER_TREND_3Y_URL, { cache: "no-store" })
             ]);
 
             if (!oneRes.ok) throw new Error("Failed to load Tanker 1Y Trend CSV");
-            if (!fiveRes.ok) throw new Error("Failed to load Tanker 5Y Trend CSV");
+            if (!threeRes.ok) throw new Error("Failed to load Tanker 3Y Trend CSV");
 
             const oneText = await oneRes.text();
-            const fiveText = await fiveRes.text();
+            const threeText = await threeRes.text();
 
             const oneData = Papa.parse(oneText, { header: true, skipEmptyLines: true }).data;
-            const fiveData = Papa.parse(fiveText, { header: true, skipEmptyLines: true }).data;
+            const threeData = Papa.parse(threeText, { header: true, skipEmptyLines: true }).data;
+
+            Object.keys(tankerTrendColorMap).forEach(key => delete tankerTrendColorMap[key]);
 
             function createTankerTrendCard(title, dataRows, maxXTicks = 9) {
                 const card = document.createElement("div");
@@ -1335,12 +1399,19 @@
                 const shipKeys = keys.slice(1);
                 const colorMap = buildSeriesColorMap(shipKeys);
 
+                shipKeys.forEach(key => {
+                    const tankerKey = normaliseTankerTypeKey(key);
+                    if (!(tankerKey in tankerTrendColorMap)) {
+                        tankerTrendColorMap[tankerKey] = colorMap[key];
+                    }
+                });
+
 
                 const labels = dataRows.map(r => r[dateKey]);
 
                 const datasets = shipKeys.map((key, i) => ({
                     label: "  " + key + "  ",
-                    data: dataRows.map(r => toNumber(r[key])),
+                    data: dataRows.map(r => parseMoneyCell(r[key])),
                     borderColor: colorMap[key],
                     backgroundColor: 'transparent',
                     borderWidth: 2,
@@ -1400,7 +1471,7 @@
                             },
                             y: {
                                 grid: { color: getCss("--grid") },
-                                ticks: { callback: (val) => "£" + fmtGBPCompact(val) },
+                                ticks: { callback: (val) => "$" + fmtCompactNumber(val) },
                                 title: { display: true, text: "USD/day" }
                             }
                         }
@@ -1409,7 +1480,7 @@
             }
 
             createTankerTrendCard("TANKER 1YR TC RATES ANNUAL TREND", oneData);
-            createTankerTrendCard("TANKER 3YR TC RATES ANNUAL TREND", fiveData, 9);
+            createTankerTrendCard("TANKER 3YR TC RATES ANNUAL TREND", threeData, 9);
         }
 
         async function loadLastUpdatedFromSheet() {
@@ -1463,22 +1534,52 @@
                 const rows = parsed.data;
                 if (!rows || rows.length < 2) throw new Error("CSV has no data rows.");
 
+                clearChartHost(chartsEl);
+
                 const headers = rows[0];
                 const titles = headers.slice(1).map(t => String(t ?? "").trim()).filter(Boolean);
                 const dataRows = rows.slice(1);
-                const tenors = dataRows.map(r => String(r[0] ?? "").trim()).filter(Boolean);
+                const forwardRows = dataRows
+                    .map(r => ({
+                        tenor: String(r[0] ?? "").trim(),
+                        cells: r
+                    }))
+                    .filter(r => r.tenor);
+                const tenors = forwardRows.map(r => r.tenor);
 
                 titles.forEach((title, i) => {
-                    const values = dataRows.map(r => toNumber(r[i + 1]));
+                    const tankerType = getMappedTankerType(title);
+                    const brokerRate = tankerType ? tanker1YRateMap[tankerType] : null;
+                    const values = forwardRows.map(r => parseMoneyCell(r.cells[i + 1]));
                     const front = firstFinite(values);
                     const back = lastFinite(values);
-                    const spread = (front !== null && back !== null) ? (back - front) : null;
-                    const tail = lastStepDelta(values);
-                    const avg = avgSlopePerStep(values);
-                    const mm = minMax(values);
-                    const rangeText = (mm.min !== null && mm.max !== null) ? `$${fmtUSD(mm.min)} to $${fmtUSD(mm.max)}` : "—";
+                    const spotArb = (front !== null && brokerRate !== null) ? (front - brokerRate) : null;
+                    const arb6m = (() => {
+                        const avg6 = avgFirstNFinite(values, 2); // 2 quarterly points = 6 months
+                        return (avg6 !== null && brokerRate !== null) ? (avg6 - brokerRate) : null;
+                    })();
 
+                    const arb12m = (() => {
+                        const avg12 = avgFirstNFinite(values, 4); // 4 quarterly points = 12 months
+                        return (avg12 !== null && brokerRate !== null) ? (avg12 - brokerRate) : null;
+                    })();
+
+                    const arb24m = (() => {
+                        const avg24 = avgFirstNFinite(values, 8); // 8 quarterly points = 24 months
+                        return (avg24 !== null && brokerRate !== null) ? (avg24 - brokerRate) : null;
+                    })();
+
+                    const lump6m = lumpSumFromDaily(arb6m, 6);
+                    const lump12m = lumpSumFromDaily(arb12m, 12);
+                    
+                    const spread = (front !== null && back !== null) ? (back - front) : null;
                     const card = document.createElement("div");
+                    
+                    
+                    
+
+                    
+                    
                     card.className = "card forwardCurve";
                     const titleRow = document.createElement("div");
                     titleRow.className = "titleRow";
@@ -1493,11 +1594,6 @@
                     titleRow.appendChild(meta);
                     card.appendChild(titleRow);
 
-                    // const canvas = document.createElement("canvas");
-                    // card.appendChild(canvas);
-
-                    // start
-
                     const canvas = document.createElement("canvas");
                     const box = document.createElement("div");
                     box.className = "fcChartBox";
@@ -1505,16 +1601,14 @@
 
                     card.appendChild(box);
 
-                    //end
-
                     const metrics = document.createElement("div");
                     metrics.className = "metrics";
-                    metrics.appendChild(pill("Front (near)", front !== null ? `$${fmtUSD(front)}` : "—", "neu"));
-                    metrics.appendChild(pill("Back (far)", back !== null ? `$${fmtUSD(back)}` : "—", "neu"));
-                    metrics.appendChild(pill("Back–Front", spread !== null ? `$${fmtSignedUSD(spread)}` : "—", cls(spread)));
-                    metrics.appendChild(pill("Avg slope / qtr", avg !== null ? `$${fmtSignedUSD(avg)}` : "—", cls(avg)));
-                    metrics.appendChild(pill("Tail slope / qtr", tail !== null ? `$${fmtSignedUSD(tail)}` : "—", cls(tail)));
-                    metrics.appendChild(pill("Range", rangeText, "neu"));
+                    metrics.appendChild(pill("Spot Arb", spotArb !== null ? `$${fmtSignedUSD(spotArb)}` : "—", cls(spotArb)));
+                    metrics.appendChild(pill("6M Arb", arb6m !== null ? `$${fmtSignedUSD(arb6m)}` : "—", cls(arb6m)));
+                    metrics.appendChild(pill("12M Arb", arb12m !== null ? `$${fmtSignedUSD(arb12m)}` : "—", cls(arb12m)));
+                    metrics.appendChild(pill("24M Arb", arb24m !== null ? `$${fmtSignedUSD(arb24m)}` : "—", cls(arb24m)));
+                    metrics.appendChild(pill("6M Lump Sum", lump6m !== null ? fmtUSDm(lump6m) : "—", cls(lump6m)));
+                    metrics.appendChild(pill("12M Lump Sum", lump12m !== null ? fmtUSDm(lump12m) : "—", cls(lump12m)));
                     card.appendChild(metrics);
                     chartsEl.appendChild(card);
 
@@ -1522,24 +1616,61 @@
                         type: "line",
                         data: {
                             labels: tenors,
-                            datasets: [{
-                                data: values,
-                                borderColor: getCss("--accent"),
-                                backgroundColor: getCss("--accentFill"),
-                                borderWidth: 2,
-                                tension: 0.25,
-                                fill: true,
-                                pointRadius: 3,
-                                pointHoverRadius: 7,
-                                pointHitRadius: 6
-                            }]
+                            datasets: (() => {
+                                const ds = [{
+                                    label: title.trim(),
+                                    data: values,
+                                    borderColor: getCss("--accent"),
+                                    backgroundColor: getCss("--accentFill"),
+                                    borderWidth: 2,
+                                    tension: 0.25,
+                                    fill: true,
+                                    pointRadius: 3,
+                                    pointHoverRadius: 7,
+                                    pointHitRadius: 6
+                                }];
+
+                                const tanker1Y = tankerType ? tanker1YRateMap[tankerType] : null;
+                                const tankerColor = tankerType ? tankerTrendColorMap[tankerType] : null;
+
+                                if (tankerType && tanker1Y !== null) {
+                                    ds.push({
+                                        label: `${tankerType} 1Y TC`,
+                                        data: tenors.map(() => tanker1Y),
+                                        borderColor: tankerColor || "#ffffff",
+                                        backgroundColor: "transparent",
+                                        borderWidth: 2,
+                                        borderDash: [6, 6],
+                                        tension: 0,
+                                        fill: false,
+                                        pointRadius: 0,
+                                        pointHoverRadius: 0,
+                                        pointHitRadius: 0
+                                    });
+                                }
+
+                                return ds;
+                            })()
                         },
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
                             interaction: { mode: "index", axis: "x", intersect: false },
                             plugins: {
-                                legend: { display: false },
+                                legend: {
+                                    display: true,
+                                    labels: {
+                                        filter: function (item) {
+                                            return item.text && item.text.indexOf("1Y TC") !== -1;
+                                        },
+                                        color: getCss("--muted"),
+                                        font: { size: 11 },
+                                        usePointStyle: false,
+                                        boxWidth: 18,
+                                        boxHeight: 2,
+                                        padding: 12
+                                    }
+                                },
                                 tooltip: {
                                     enabled: true,
                                     padding: 16,
@@ -1582,10 +1713,15 @@
                 await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
                 setStatus(`Data loaded.`);
-                const sheetDate = await loadLastUpdatedFromSheet();
-                lastUpdatedEl.textContent = sheetDate
-                    ? `Last updated: ${sheetDate}`
-                    : "Last updated: —";
+                try {
+                    const sheetDate = await loadLastUpdatedFromSheet();
+                    lastUpdatedEl.textContent = sheetDate
+                        ? `Last updated: ${sheetDate}`
+                        : "Last updated: —";
+                } catch (err) {
+                    console.error("Last updated fetch failed", err);
+                    lastUpdatedEl.textContent = "Last updated: —";
+                }
 
 
             } catch (err) {
