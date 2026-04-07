@@ -550,6 +550,32 @@
         color: #fde68a;
     }
 
+    #alibraDashboard .forwardCurve .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #alibraDashboard .forwardCurve .metrics .pill:last-child {
+        grid-column: 1 / -1;
+    }
+
+    @media (min-width: 520px) {
+        #alibraDashboard .forwardCurve .metrics {
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+        }
+
+        #alibraDashboard .forwardCurve .metrics .pill {
+            grid-column: span 2;
+        }
+
+        #alibraDashboard .forwardCurve .metrics .pill:nth-child(4) {
+            grid-column: 2 / span 2;
+        }
+
+        #alibraDashboard .forwardCurve .metrics .pill:nth-child(5) {
+            grid-column: 4 / span 2;
+        }
+    }
+
 
     /* =========================
    FIX WP THICK WHITE TABLE GRID
@@ -668,8 +694,9 @@
         <h2 class="sectionTitle">
             FORWARD CURVES: SHIP TYPES (USD/DAY)
         </h2>
-        <div class="sub">Blue curve shows calculated forward TCE; dashed line shows Alibra TC benchmark. Arb metrics compare the curve to the
-        benchmark over spot, 6M, 12M and 24M horizons.</div>
+        <div class="sub">Blue curve shows calculated forward TCE; dashed line shows Alibra TC benchmark. Arb metrics
+            compare the curve to the
+            benchmark over 6M, 12M and 24M horizons.</div>
     </section>
 
     <div id="charts" class="grid"></div>
@@ -870,33 +897,33 @@
             return td;
         }
 
-    function avgFirstNFinite(arr, n) {
-        const vals = [];
-        for (const v of arr) {
-            if (typeof v === "number" && Number.isFinite(v)) {
-                vals.push(v);
-                if (vals.length === n) break;
+        function avgFirstNFinite(arr, n) {
+            const vals = [];
+            for (const v of arr) {
+                if (typeof v === "number" && Number.isFinite(v)) {
+                    vals.push(v);
+                    if (vals.length === n) break;
+                }
             }
+            if (!vals.length || vals.length < n) return null;
+            return vals.reduce((a, b) => a + b, 0) / vals.length;
         }
-        if (!vals.length || vals.length < n) return null;
-        return vals.reduce((a, b) => a + b, 0) / vals.length;
-    }
 
-    function lumpSumFromDaily(dayRateDiff, months) {
-        if (dayRateDiff === null || dayRateDiff === undefined) return null;
-        const days = months * 30.4375;
-        return dayRateDiff * days;
-    }
-
-    function fmtUSDm(n) {
-        if (n === null || n === undefined) return "—";
-        const abs = Math.abs(n);
-        const sign = n > 0 ? "+" : (n < 0 ? "−" : "");
-        if (abs >= 1000000) {
-            return `${sign}$${(abs / 1000000).toFixed(1)}m`;
+        function lumpSumFromDaily(dayRateDiff, months) {
+            if (dayRateDiff === null || dayRateDiff === undefined) return null;
+            const days = months * 30.4375;
+            return dayRateDiff * days;
         }
-        return `${sign}$${fmtUSD(abs)}`;
-    }
+
+        function fmtUSDm(n) {
+            if (n === null || n === undefined) return "—";
+            const abs = Math.abs(n);
+            const sign = n > 0 ? "+" : (n < 0 ? "−" : "");
+            if (abs >= 1000000) {
+                return `${sign}$${(abs / 1000000).toFixed(1)}m`;
+            }
+            return `${sign}$${fmtUSD(abs)}`;
+        }
 
         function firstFinite(arr) {
             for (const v of arr) if (typeof v === "number" && Number.isFinite(v)) return v;
@@ -1553,7 +1580,6 @@
                     const values = forwardRows.map(r => parseMoneyCell(r.cells[i + 1]));
                     const front = firstFinite(values);
                     const back = lastFinite(values);
-                    const spotArb = (front !== null && brokerRate !== null) ? (front - brokerRate) : null;
                     const arb6m = (() => {
                         const avg6 = avgFirstNFinite(values, 2); // 2 quarterly points = 6 months
                         return (avg6 !== null && brokerRate !== null) ? (avg6 - brokerRate) : null;
@@ -1571,15 +1597,15 @@
 
                     const lump6m = lumpSumFromDaily(arb6m, 6);
                     const lump12m = lumpSumFromDaily(arb12m, 12);
-                    
+
                     const spread = (front !== null && back !== null) ? (back - front) : null;
                     const card = document.createElement("div");
-                    
-                    
-                    
 
-                    
-                    
+
+
+
+
+
                     card.className = "card forwardCurve";
                     const titleRow = document.createElement("div");
                     titleRow.className = "titleRow";
@@ -1603,7 +1629,6 @@
 
                     const metrics = document.createElement("div");
                     metrics.className = "metrics";
-                    metrics.appendChild(pill("Spot Arb", spotArb !== null ? `$${fmtSignedUSD(spotArb)}` : "—", cls(spotArb)));
                     metrics.appendChild(pill("6M Arb", arb6m !== null ? `$${fmtSignedUSD(arb6m)}` : "—", cls(arb6m)));
                     metrics.appendChild(pill("12M Arb", arb12m !== null ? `$${fmtSignedUSD(arb12m)}` : "—", cls(arb12m)));
                     metrics.appendChild(pill("24M Arb", arb24m !== null ? `$${fmtSignedUSD(arb24m)}` : "—", cls(arb24m)));
