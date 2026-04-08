@@ -554,10 +554,6 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    #alibraDashboard .forwardCurve .metrics .pill:last-child {
-        grid-column: 1 / -1;
-    }
-
     @media (min-width: 520px) {
         #alibraDashboard .forwardCurve .metrics {
             grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -567,13 +563,6 @@
             grid-column: span 2;
         }
 
-        #alibraDashboard .forwardCurve .metrics .pill:nth-child(4) {
-            grid-column: 2 / span 2;
-        }
-
-        #alibraDashboard .forwardCurve .metrics .pill:nth-child(5) {
-            grid-column: 4 / span 2;
-        }
     }
 
 
@@ -915,14 +904,15 @@
             return dayRateDiff * days;
         }
 
-        function fmtUSDm(n) {
+        function fmtUSDm(n, includeSymbol = true) {
             if (n === null || n === undefined) return "—";
             const abs = Math.abs(n);
             const sign = n > 0 ? "+" : (n < 0 ? "−" : "");
+            const prefix = includeSymbol ? "$" : "";
             if (abs >= 1000000) {
-                return `${sign}$${(abs / 1000000).toFixed(1)}m`;
+                return `${sign}${prefix}${(abs / 1000000).toFixed(1)}m`;
             }
-            return `${sign}$${fmtUSD(abs)}`;
+            return `${sign}${prefix}${fmtUSD(abs)}`;
         }
 
         function firstFinite(arr) {
@@ -943,7 +933,7 @@
             return "neu";
         }
 
-        function pill(key, value, colorClass = "neu") {
+        function pill(key, value, colorClass = "neu", sublabel = "") {
             const p = document.createElement("div");
             p.className = "pill";
             const k = document.createElement("div");
@@ -954,6 +944,12 @@
             v.textContent = value;
             p.appendChild(k);
             p.appendChild(v);
+            if (sublabel) {
+                const s = document.createElement("div");
+                s.className = "k";
+                s.textContent = sublabel;
+                p.appendChild(s);
+            }
             return p;
         }
 
@@ -1371,7 +1367,7 @@
                             },
                             y: {
                                 grid: { color: getCss("--grid") },
-                                ticks: { callback: (val) => "$" + fmtCompactNumber(val) },
+                                ticks: { callback: (val) => fmtCompactNumber(val) },
                                 title: { display: true, text: "USD/day" }
                             }
                         }
@@ -1498,7 +1494,7 @@
                             },
                             y: {
                                 grid: { color: getCss("--grid") },
-                                ticks: { callback: (val) => "$" + fmtCompactNumber(val) },
+                                ticks: { callback: (val) => fmtCompactNumber(val) },
                                 title: { display: true, text: "USD/day" }
                             }
                         }
@@ -1597,6 +1593,7 @@
 
                     const lump6m = lumpSumFromDaily(arb6m, 6);
                     const lump12m = lumpSumFromDaily(arb12m, 12);
+                    const lump24m = lumpSumFromDaily(arb24m, 24);
 
                     const spread = (front !== null && back !== null) ? (back - front) : null;
                     const card = document.createElement("div");
@@ -1629,11 +1626,12 @@
 
                     const metrics = document.createElement("div");
                     metrics.className = "metrics";
-                    metrics.appendChild(pill("6M Arb", arb6m !== null ? `$${fmtSignedUSD(arb6m)}` : "—", cls(arb6m)));
-                    metrics.appendChild(pill("12M Arb", arb12m !== null ? `$${fmtSignedUSD(arb12m)}` : "—", cls(arb12m)));
-                    metrics.appendChild(pill("24M Arb", arb24m !== null ? `$${fmtSignedUSD(arb24m)}` : "—", cls(arb24m)));
-                    metrics.appendChild(pill("6M Lump Sum", lump6m !== null ? fmtUSDm(lump6m) : "—", cls(lump6m)));
-                    metrics.appendChild(pill("12M Lump Sum", lump12m !== null ? fmtUSDm(lump12m) : "—", cls(lump12m)));
+                    metrics.appendChild(pill("6M Arb", arb6m !== null ? fmtSignedUSD(arb6m) : "—", cls(arb6m), "USD/DAY"));
+                    metrics.appendChild(pill("12M Arb", arb12m !== null ? fmtSignedUSD(arb12m) : "—", cls(arb12m), "USD/DAY"));
+                    metrics.appendChild(pill("24M Arb", arb24m !== null ? fmtSignedUSD(arb24m) : "—", cls(arb24m), "USD/DAY"));
+                    metrics.appendChild(pill("6M Lump Sum", lump6m !== null ? fmtUSDm(lump6m, false) : "—", cls(lump6m), "USD"));
+                    metrics.appendChild(pill("12M Lump Sum", lump12m !== null ? fmtUSDm(lump12m, false) : "—", cls(lump12m), "USD"));
+                    metrics.appendChild(pill("24M Lump Sum", lump24m !== null ? fmtUSDm(lump24m, false) : "—", cls(lump24m), "USD"));
                     card.appendChild(metrics);
                     chartsEl.appendChild(card);
 
@@ -1719,7 +1717,7 @@
                                 },
                                 y: {
                                     grid: { color: getCss("--grid") },
-                                    ticks: { callback: (val) => "$" + fmtUSD(val) },
+                                    ticks: { callback: (val) => fmtUSD(val) },
                                     title: { display: true, text: "USD/day" }
                                 }
                             }
