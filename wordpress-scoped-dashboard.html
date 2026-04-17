@@ -685,7 +685,7 @@
         </h2>
         <div class="sub">Blue curve shows calculated forward TCE; dashed line shows Alibra TC benchmark. Arb metrics
             compare the curve to the
-            benchmark over 6M, 12M and 24M horizons.</div>
+            benchmark over 6M, 12M and 18M horizons.</div>
     </section>
 
     <div id="charts" class="grid"></div>
@@ -1586,14 +1586,14 @@
                         return (avg12 !== null && brokerRate !== null) ? (avg12 - brokerRate) : null;
                     })();
 
-                    const arb24m = (() => {
-                        const avg24 = avgFirstNFinite(values, 8); // 8 quarterly points = 24 months
-                        return (avg24 !== null && brokerRate !== null) ? (avg24 - brokerRate) : null;
+                    const arb18m = (() => {
+                        const avg18 = avgFirstNFinite(values, 6); // 6 quarterly points = 18 months
+                        return (avg18 !== null && brokerRate !== null) ? (avg18 - brokerRate) : null;
                     })();
 
                     const lump6m = lumpSumFromDaily(arb6m, 6);
                     const lump12m = lumpSumFromDaily(arb12m, 12);
-                    const lump24m = lumpSumFromDaily(arb24m, 24);
+                    const lump18m = lumpSumFromDaily(arb18m, 18);
 
                     const spread = (front !== null && back !== null) ? (back - front) : null;
                     const card = document.createElement("div");
@@ -1628,10 +1628,10 @@
                     metrics.className = "metrics";
                     metrics.appendChild(pill("6M Arb", arb6m !== null ? fmtSignedUSD(arb6m) : "—", cls(arb6m), "USD/DAY"));
                     metrics.appendChild(pill("12M Arb", arb12m !== null ? fmtSignedUSD(arb12m) : "—", cls(arb12m), "USD/DAY"));
-                    metrics.appendChild(pill("24M Arb", arb24m !== null ? fmtSignedUSD(arb24m) : "—", cls(arb24m), "USD/DAY"));
+                    metrics.appendChild(pill("18M Arb", arb18m !== null ? fmtSignedUSD(arb18m) : "—", cls(arb18m), "USD/DAY"));
                     metrics.appendChild(pill("6M Lump Sum", lump6m !== null ? fmtUSDm(lump6m, false) : "—", cls(lump6m), "USD"));
                     metrics.appendChild(pill("12M Lump Sum", lump12m !== null ? fmtUSDm(lump12m, false) : "—", cls(lump12m), "USD"));
-                    metrics.appendChild(pill("24M Lump Sum", lump24m !== null ? fmtUSDm(lump24m, false) : "—", cls(lump24m), "USD"));
+                    metrics.appendChild(pill("18M Lump Sum", lump18m !== null ? fmtUSDm(lump18m, false) : "—", cls(lump18m), "USD"));
                     card.appendChild(metrics);
                     chartsEl.appendChild(card);
 
