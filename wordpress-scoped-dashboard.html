@@ -683,7 +683,7 @@
         <h2 class="sectionTitle">
             FORWARD CURVES: SHIP TYPES (USD/DAY)
         </h2>
-        <div class="sub">Blue curve shows calculated forward TCE; dashed line shows Alibra TC benchmark. Arb metrics
+        <div class="sub">Blue curve shows calculated forward TCE; dashed line shows Alibra physical TC benchmark. Arb metrics
             compare the curve to the
             benchmark over 6M, 12M and 18M horizons.</div>
     </section>
@@ -1658,7 +1658,7 @@
 
                                 if (tankerType && tanker1Y !== null) {
                                     ds.push({
-                                        label: `${tankerType} 1Y TC`,
+                                        label: `Physical ${tankerType} 1Y TC`,
                                         data: tenors.map(() => tanker1Y),
                                         borderColor: tankerColor || "#ffffff",
                                         backgroundColor: "transparent",
