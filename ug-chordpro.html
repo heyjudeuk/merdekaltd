@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UG ChordPro — Merdeka Ltd</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    html, body { width: 100%; min-height: 100%; }
+
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", "Helvetica Neue", Arial;
+      background: #191d1e;
+      background: linear-gradient(0deg, #191d1e 50%, #283139 100%);
+      background-attachment: fixed;
+      color: #9aa3b2;
+    }
+
+    #projector {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .site-nav {
+      position: relative;
+      z-index: 1;
+      padding: 18px 24px 0;
+    }
+    .site-nav a {
+      color: #6fd2f3;
+      text-decoration: none;
+      font-size: 0.875rem;
+      opacity: 0.75;
+      transition: opacity 0.15s, color 0.15s;
+    }
+    .site-nav a:hover { opacity: 1; color: #93e9f3; }
+
+    .cp-wrap {
+      position: relative;
+      z-index: 1;
+      padding: 24px 20px 48px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .cp-header {
+      margin-bottom: 8px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(111, 210, 243, 0.15);
+    }
+
+    .cp-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #e4e8f0;
+    }
+
+    .cp-sub {
+      font-size: 0.9rem;
+      color: #9aa3b2;
+      line-height: 1.65;
+      margin: 14px 0 28px;
+      max-width: 72ch;
+    }
+
+    .cp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 720px) {
+      .cp-grid { grid-template-columns: 1fr; }
+    }
+
+    .cp-col label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #6fd2f3;
+      margin-bottom: 8px;
+    }
+
+    .cp-textarea {
+      width: 100%;
+      height: 420px;
+      resize: vertical;
+      background: rgba(0,0,0,0.3);
+      color: #e4e8f0;
+      border: 1px solid rgba(111, 210, 243, 0.15);
+      border-radius: 6px;
+      padding: 16px;
+      font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: auto;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .cp-textarea:focus {
+      outline: none;
+      border-color: #6fd2f3;
+      background: rgba(0,0,0,0.45);
+    }
+
+    #cp-output {
+      background: rgba(0,0,0,0.2);
+      color: #b8c8d8;
+    }
+
+    .cp-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .cp-btn {
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 20px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.08s;
+    }
+    .cp-btn:active { transform: scale(0.97); }
+
+    .cp-btn-primary {
+      background: rgba(111, 210, 243, 0.12);
+      border: 1px solid #6fd2f3;
+      color: #6fd2f3;
+    }
+    .cp-btn-primary:hover {
+      background: rgba(111, 210, 243, 0.22);
+      color: #93e9f3;
+      border-color: #93e9f3;
+    }
+
+    .cp-btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(111, 210, 243, 0.3);
+      color: rgba(111, 210, 243, 0.7);
+    }
+    .cp-btn-secondary:hover {
+      background: rgba(111, 210, 243, 0.08);
+      border-color: #6fd2f3;
+      color: #93e9f3;
+    }
+
+    .cp-status {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #6fd2f3;
+      margin-left: auto;
+    }
+
+    .cp-notes {
+      margin-top: 36px;
+      padding: 20px 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(111, 210, 243, 0.1);
+      border-left: 3px solid rgba(111, 210, 243, 0.5);
+      border-radius: 0 6px 6px 0;
+      font-size: 0.84rem;
+      color: #9aa3b2;
+      line-height: 1.75;
+    }
+    .cp-notes b { color: #e4e8f0; }
+  </style>
+</head>
+<body>
+
+<canvas id="projector"></canvas>
+
+<nav class="site-nav"><a href="index.html">← Merdeka Ltd</a></nav>
+
+<div class="cp-wrap">
+  <div class="cp-header">
+    <div class="cp-title">Chord Line &rarr; ChordPro</div>
+  </div>
+
+  <p class="cp-sub">
+    Paste chords-above-lyrics text on the left (chords on their own line, the matching lyric line directly below).
+    Click convert, and the ChordPro version appears on the right with chords moved inline as [Chord] tags.
+  </p>
+
+  <div class="cp-grid">
+    <div class="cp-col">
+      <label for="cp-input">Your text</label>
+      <textarea id="cp-input" class="cp-textarea" spellcheck="false"></textarea>
+    </div>
+    <div class="cp-col">
+      <label for="cp-output">ChordPro output</label>
+      <textarea id="cp-output" class="cp-textarea" spellcheck="false" readonly></textarea>
+    </div>
+  </div>
+
+  <div class="cp-actions">
+    <button type="button" class="cp-btn cp-btn-primary" id="cp-convert">Convert to ChordPro</button>
+    <button type="button" class="cp-btn cp-btn-secondary" id="cp-copy">Copy output</button>
+    <button type="button" class="cp-btn cp-btn-secondary" id="cp-example">Load example</button>
+    <span class="cp-status" id="cp-status" aria-live="polite"></span>
+  </div>
+
+  <div class="cp-notes">
+    <b>How it reads your text:</b> a line counts as a chord line if every token on it looks like a chord (root A&ndash;G, optional flat/sharp, optional 7/9/maj7/sus4/dim/m/etc, optional slash bass). If a chord line is followed by a lyric line, the chords get inserted into the lyric at the matching column. If a chord line stands alone (an instrumental bar), it&rsquo;s output as a line of bracketed chords. A whole line wrapped in single brackets, like [Verse 1] or [low C rumble], becomes a {comment: ...} line, unless the bracket only contains a single chord (like [C]) or a time signature (like [3/4]), which are left as ChordPro recognises them directly. Lines it isn&rsquo;t sure about are passed through unchanged, so it&rsquo;s worth a quick read over the output before you use it.
+  </div>
+</div>
+
+<script>
+(function () {
+  var chordToken = /^[A-G][#b]?(?:maj13|maj11|maj9|maj7|maj|min13|min11|min9|min7|min|m13|m11|m9|m7|m6|m|dim7|dim|aug|sus4|sus2|sus|add9|add11|6|7|9|11|13|5)?(?:b5|#5|#9|b9|#11|b13)?(?:\/[A-G][#b]?)?$/;
+  var timeSig = /^\d+\/\d+$/;
+
+  function tokensWithIndex(line) {
+    var out = [], re = /\S+/g, m;
+    while ((m = re.exec(line)) !== null) out.push({ text: m[0], index: m.index });
+    return out;
+  }
+
+  function isChordLine(line) {
+    var toks = tokensWithIndex(line);
+    return toks.length > 0 && toks.every(function (t) { return chordToken.test(t.text); });
+  }
+
+  function isBracketOnlyLine(line) {
+    var m = line.trim().match(/^\[(.+)\]$/);
+    return m ? m[1] : null;
+  }
+
+  function mergeChordLyric(chordLine, lyricLine) {
+    var toks = tokensWithIndex(chordLine).sort(function (a, b) { return b.index - a.index; });
+    var result = lyricLine;
+    toks.forEach(function (t) {
+      var pos = t.index;
+      if (pos > result.length) result = result.padEnd(pos, ' ');
+      result = result.slice(0, pos) + '[' + t.text + ']' + result.slice(pos);
+    });
+    return result.replace(/\s+$/, '');
+  }
+
+  function instrumentalLine(chordLine) {
+    return tokensWithIndex(chordLine).map(function (t) { return '[' + t.text + ']'; }).join(' ');
+  }
+
+  function convert(text) {
+    var lines = text.replace(/\r\n/g, '\n').split('\n');
+    var out = [];
+    var i = 0;
+    while (i < lines.length) {
+      var line = lines[i];
+      var bracketInner = isBracketOnlyLine(line);
+      if (bracketInner !== null) {
+        out.push(chordToken.test(bracketInner) || timeSig.test(bracketInner)
+          ? line.trim()
+          : '{comment: ' + bracketInner + '}');
+        i++; continue;
+      }
+      if (line.trim() !== '' && isChordLine(line)) {
+        var next = i + 1 < lines.length ? lines[i + 1] : null;
+        var nextIsUsableLyric = next !== null && next.trim() !== '' && isBracketOnlyLine(next) === null && !isChordLine(next);
+        if (nextIsUsableLyric) { out.push(mergeChordLyric(line, next)); i += 2; }
+        else { out.push(instrumentalLine(line)); i++; }
+        continue;
+      }
+      out.push(line); i++;
+    }
+    return out.join('\n');
+  }
+
+  var input  = document.getElementById('cp-input');
+  var output = document.getElementById('cp-output');
+  var status = document.getElementById('cp-status');
+
+  function flash(msg) {
+    status.textContent = msg;
+    setTimeout(function () { status.textContent = ''; }, 1500);
+  }
+
+  document.getElementById('cp-convert').addEventListener('click', function () {
+    output.value = convert(input.value);
+    flash('Converted');
+  });
+
+  document.getElementById('cp-copy').addEventListener('click', function () {
+    navigator.clipboard.writeText(output.value).then(function () { flash('Copied'); });
+  });
+
+  document.getElementById('cp-example').addEventListener('click', function () {
+    input.value =
+      '[Verse 1]\n' +
+      'G              D\n' +
+      'Example line of lyrics goes here\n' +
+      'Em             C\n' +
+      'And another one follows along\n' +
+      '\n' +
+      '[Chorus]\n' +
+      'C        G\n' +
+      'Some chorus words sit right here\n' +
+      '[3/4]\n' +
+      'Am       F\n' +
+      'Closing out the phrase\n' +
+      '\n' +
+      '[instrumental break]\n' +
+      'C Em7 F G\n' +
+      '\n' +
+      '[low C rumble]\n' +
+      '[C]';
+    output.value = '';
+  });
+})();
+
+// ── Particle canvas (matches Merdeka homepage) ─────────────────
+(function () {
+  'use strict';
+  var canvas = document.getElementById('projector');
+  var ctx = canvas.getContext('2d');
+  var DPR = Math.max(1, window.devicePixelRatio || 1);
+  var W, H;
+
+  function resize() {
+    var bw = document.documentElement.clientWidth;
+    var bh = document.documentElement.clientHeight;
+    W = canvas.width  = Math.floor(bw * DPR);
+    H = canvas.height = Math.floor(bh * DPR);
+    canvas.style.width  = bw + 'px';
+    canvas.style.height = bh + 'px';
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  var particleSets = [
+    { num: 320, bw: 3,  amax: 0.35, areaH: .5, color: '#0cdbf3', fill: false },
+    { num: 120, bw: 6,  amax: 0.28, areaH: 1,  color: '#6fd2f3', fill: true  },
+    { num: 12,  bw: 16, amax: 0.18, areaH: 1,  color: '#93e9f3', fill: true  }
+  ];
+  var particles = [];
+
+  function range(a, b) { return a + (b - a) * Math.random(); }
+  function wrange(a, b, _p, band, str) {
+    return Math.random() <= (str || 0) ? range(band[0], band[1]) : range(a, b);
+  }
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+
+  function initParticle(p, areaH) {
+    p.initY = wrange(0, H, 1, [H*(2-areaH/2)/4, H*(2+areaH/2)/4], 0.8);
+    p.initX = wrange(0, W, 1, [W/4, W*3/4], 0.6);
+    p.x = p.initX; p.y = p.initY;
+    p.tx = range(p.initX - p.dist, p.initX + p.dist);
+    p.ty = range(p.initY - p.dist, p.initY + p.dist);
+    p.alpha = range(0.05, p.amax);
+    p.da = (Math.random() < .5 ? -1 : 1) * range(0.002, 0.01);
+  }
+
+  particleSets.forEach(function (s) {
+    for (var j = 0; j < s.num; j++) {
+      var p = { bw: s.bw, amax: s.amax, color: s.color, fill: s.fill, dist: s.bw * 2 };
+      initParticle(p, s.areaH);
+      particles.push(p);
+    }
+  });
+
+  var last = performance.now();
+  (function tick(now) {
+    var dt = clamp((now - last) / 16.67, 0.2, 2);
+    last = now;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(function (p) {
+      var ease = 0.02 * dt;
+      p.x += (p.tx - p.x) * ease;
+      p.y += (p.ty - p.y) * ease;
+      if (Math.abs(p.x - p.tx) < DPR && Math.abs(p.y - p.ty) < DPR) {
+        p.tx = range(p.initX - p.dist, p.initX + p.dist);
+        p.ty = range(p.initY - p.dist, p.initY + p.dist);
+      }
+      p.alpha += p.da * dt;
+      if (p.alpha > p.amax || p.alpha < 0.05) { p.da *= -1; p.alpha = clamp(p.alpha, 0.05, p.amax); }
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      if (p.fill) {
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = (p.bw * DPR) / 1.6;
+        ctx.beginPath(); ctx.arc(0, 0, p.bw * DPR, 0, Math.PI * 2); ctx.fill();
+      } else {
+        ctx.strokeStyle = p.color;
+        ctx.lineWidth = DPR;
+        ctx.beginPath(); ctx.arc(0, 0, p.bw * DPR, 0, Math.PI * 2); ctx.stroke();
+      }
+      ctx.restore();
+    });
+    requestAnimationFrame(tick);
+  })(performance.now());
+})();
+</script>
+</body>
+</html>
