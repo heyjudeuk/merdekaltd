@@ -276,7 +276,7 @@
     <div class="input-group">
       <div class="input-col">
         <label for="chordInput" class="sr-only">Chord symbol</label>
-        <input type="text" id="chordInput" placeholder="e.g. Cmaj7  or  Dm7/F" autocomplete="off" spellcheck="false">
+        <input type="text" id="chordInput" placeholder="e.g. Cmaj7  or  Dm7/F Em D" autocomplete="off" spellcheck="false">
         <div class="helper-btns" id="helperBtns"></div>
         <div class="error-msg" id="parseError" aria-live="polite"></div>
       </div>
@@ -427,8 +427,10 @@ function parseChord(raw) {
   // Quality = everything after the tonic in Tonal's canonical symbol
   const quality = chord.symbol.slice(chord.tonic.length).replace(/\/.*$/, '');
 
-  // Tonal's symbol is already properly cased; append bass if present
-  const displaySymbol = chord.symbol + (chord.bass ? '/' + chord.bass : '');
+  // Tonal's symbol already includes the /bass suffix for slash chords
+  const displaySymbol = chord.symbol.includes('/') || !chord.bass
+    ? chord.symbol
+    : chord.symbol + '/' + chord.bass;
 
   return { symbol: s, displaySymbol, rootClass, noteClasses, bassNoteClass, intervals, quality };
 }
@@ -687,13 +689,19 @@ function addChord() {
   const raw = inp.value.trim();
   if (!raw) return;
 
-  const result = parseChord(raw);
-  if (!result) { showInputError('Could not parse chord'); return; }
-  if (result.error) { showInputError(result.error); return; }
+  // Support multiple space-separated chords in one entry, e.g. "Cmaj7 Dm7/F Em D"
+  const tokens = raw.split(/\s+/);
+  const results = [];
+  for (const token of tokens) {
+    const result = parseChord(token);
+    if (!result) { showInputError(`Could not parse chord "${token}"`); return; }
+    if (result.error) { showInputError(result.error); return; }
+    results.push(result);
+  }
 
   inp.classList.remove('is-error');
   errEl.textContent = '';
-  sequence.push(result);
+  sequence.push(...results);
   inp.value = '';
   inp.focus();
   renderSequence();
